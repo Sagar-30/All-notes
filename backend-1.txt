@@ -1,0 +1,524 @@
+lacture-1:
+----------
+
+import http => const http = required("http");
+impotr fs(file system) => const fs = require("fs");
+
+Using fs = readFileSync();
+
+making server = const server = http.createServer((req,res)=>{ req.url , res.end('') || res.write('')}) 
+
+lacture-2:
+----------
+
+Modules: 1. old : module.exports , require
+         2. Es6 : export , import , type:'module' in package json.
+
+types: internal,core,external(install via npm)
+nodeman : for restart server evrytime.
+install : npm i -g (global), npm i -D (devDependency)
+Create packeage json: npm init
+package start script: 'script':{"start":"nodeman index.js",end:""}
+nvm(node version manager): nvm list,num list available , num install <version> , nvm use <version>, nvm alias default <version>
+Reading value from terminal: const readline = require('readline') , 
+                                const interface = readline.createInterface({
+                                                  input: process.stdin,
+                                                  output: process.stdout,
+                                                   })
+                                 interface.question("Enter value",(value)=>{
+                                                    console.log(value);
+                                    })
+fileSystem: sync(block code) : require('fs') , fs.readFileSync('path',{ encoding: "utf8"}),fs.writeFilesync('path','data'),fs.appendFileSync('path','data'),fs.unlinkSync("path");
+            Async(non-block) : fs.readFile("path",(err,data)=>{}), fs.writeFile('path','data',(err)=>{}), fs.appendFile('path','data',(err)=>{}), fs.unlink("path",(err)=>{})
+
+pathModule: require('path'); path.join("src","files","data.txt") ; path.resolve("src","files","data.txt")
+
+lacture-3:
+----------
+
+Debug: node inspect index.js , setBreakPoint("index.js",4) , watch("fxn Name") , cont. 
+       OR use VS-Code debugger
+nodeMailer : const nodemailer = require("nodemailer"),async function, const transport = nodemailer.createTransport,
+            const mailOptions = {sender:"",to:"",subject:"",text:""}, transport.sendMail(mailOptions);(in try catch);
+
+Events: req.on("event",()=>{})
+       1). Built in: data, error, listening, end.
+                   let data;
+                 :if(req.method == "post"){
+                     req.on('data',(chunk)=>{
+                     data += chunk.toString();
+                     })
+                 };
+       2). Custom Events : import "events", this.emmit(""), event.eventEmmiter, addListener;
+                          > import Events from "events";
+                            class tasks extends Events.eventEmmiter(
+                                   constructor(name){                          //constructor function
+                                          super();
+                                          this.name = name;
+                                   }
+                                   TaskAdd(){
+                                          this.emmit("Add")                      //Event Name
+                                          console.log("Task has been added");
+                                   }
+                            );
+                            const task = new tasks;                          //Creating new class
+                            task.addListener("Add"=>{                        // calling event by name
+                                   console.log("Task created SuccessFully")
+                            })
+                            task.TaskAdd();                                //Calling method
+
+
+lacture-4: Express
+----------
+
+Express: framework , npm i express , import express from "express";
+Server Create: const server = express();
+
+Methods:server.use(), server.get("/",(req,res)=>{}), server.post("/",(req,res)=>{}), server.put("/",(req,res)=>{}), server.delete("/",(req,res)=>{}), 
+
+Response send: res.send("ok") => we can also use res.end() but res.send() implicitly uses .end and it gives more like method,path etc. 
+
+server create: import express from "express";
+               const server = express();
+               server.get("/",(req,res)=>{
+                     res.send("Welcome");
+               });
+               server.listen(3000);
+
+MiddleWare: (req,res,next)=>{next()} 
+            handle requests and send response. Can use as many as middleware we want
+           :server.get("/",
+                 (req,res,next)=>{                       //First Middleware
+                     console.log("Hello");
+                     next();
+               },
+               server.get("/",(req,res)=>{         //Second Middleware
+                     res.send("Welcome");
+               });
+
+ Note: we can define like above or we can create saperate function and then call or we can pass array of functions
+      if we want to check if data is correct or not before response and in more cases we use middlewares.
+
+MiddleWare types: Global=> Runs on every type: get,post,put,delete 
+                       function globalMiddleWare(req,res,next){
+                            console.log("Welcome");
+                            next();
+                       }
+                        server.use(globalMiddleWare)    //Runs on every type: get,post,put,delete (All)
+                
+                   Root level=> created for specific path
+                             :  server.get("/users",(req,res,next)=>{
+                     res.send("Welcome");
+                     next();
+                        });
+
+HTTP Header :(SET):  provide metadata like type,length etc.
+headers: content-type , authorization , accept language , user agent , cache control
+
+Create Header: server.get("/",(req,res)=>{
+                     res.set("content-type","plain/text")
+                     res.send("Welcome");
+               });
+
+Status Code:(Status()) => server.get("/",(req,res)=>{
+                     res.Status(201).send("ok");
+               });
+
+Serving HTML file in Express: (express.static("path/folder"))
+                            :const server = server();
+                             server.use(express.static("public")) //Public is folder name
+       NOTE: if we give folder name then we can access all files in url by typing their name eg: /index.HTML
+
+------------------------------------------------------------------------------------------------------------
+                                      Week - 2
+------------------------------------------------------------------------------------------------------------
+MVC:(model view controller) - Model: We perform data related expression into model like crud,
+                              view: user interface that display data so we can interact with it.
+                              controller: responsible for communication b/w model & view
+                              
+Creating MVC- Model: 1). Products.js           // Managing data performing CRUD operations
+                     const data = [];
+                     export default class products {
+                     constructor(id,name){
+                     this.id = id;
+                     this.name = name;
+                     }
+                     allData(){
+                     return data;
+                     }
+                     addProduct(item){
+                     data.push(item);
+                     }
+                     } 
+
+               2). controller: Product_controller.js      // Sending data to html file
+                         import products from "products.js"
+                         const data = new products;
+                         export default productController = (req,res)=>{
+                         res.render("html file name",{data:data.allData() })
+                         }
+
+               3). view: products.ejs    //Accessing data from controller and displaying it
+                     <!DOCTYPE html>
+                     <html>
+                     <head>
+                       <title>Product List</title>
+                     </head>
+                     <body>
+                       <h1>Products</h1>
+                       <ul>
+                         <% data.forEach(product => { %>
+                           <li><%= product.name %> (ID: <%= product.id %>)</li>
+                         <% }); %>
+                       </ul>
+                     </body>
+                     </html>
+
+          4). server file: index.js
+                         import express from 'express';
+                         import productController from './Product_controller.js'; 
+
+                         const server = express();
+
+                         server.set('view engine', 'ejs');    // Set the view engine 
+                         server.use(express.json());
+
+                         server.use(express.static('public'));    // Middleware to serve static files (like CSS, JavaScript) we can store every css file in public
+
+                         server.get('/products', productController);  
+
+                         const PORT = process.env.PORT || 3000;
+                         server.listen(PORT, () => {
+                           console.log(`Server is running on http://localhost:${PORT}`);
+                         });
+
+View engine: ejs, npm i ejs
+            server.set("view engine","ejs");
+            server.set("views", Path.join(path.resolve(),"src","views"))   // setting html(.ejs) file location
+        *Render data- <% %> , <%= %>
+        *sending data from controller: res.render("html file name",{data: data}) 
+
+Layout: create layout to saperate the pages in parts and then use them in template
+        npm i express-ejs-layout , import ejsLayouts from "express-ejs-layout";
+        server.use(ejsLayouts)
+        <div>
+        <%- body%> // by this we can include another file inside main file 
+        </div>
+Read Data From Form: server.use(express.urlencoded{extended:true})
+                     productsController(req,res)=>{
+                     console.log(req.body) // getting all post form data from .body
+                     }
+                     server.post("/product",productsController);
+
+3rd Party validator: validate form field data (express-validator)
+                     npm i express-validator, import {body,validationResult} from "express-validator";
+
+                     export const validation(req,res,next)=>{
+                     const rules = [                                            //setting rules
+                     body('name').notEmpty().withMessage("Name required");
+                     body("URL").usURL().withMessage("invalid url");
+                     ]
+                     await promise all(rules => rules.run(req))                //Applying rules
+
+                     val errors = validationResult(req);                       //checking for errors after running rules
+                     if(!errors.isEmpty()){
+                     next();
+                     }
+                     }
+Custom Validation in express-validator: 
+                                      const rules=[
+                                      body('image').custom((value, {req})=>{
+                                      if(!req.file){ throw new Error("image required")}
+                                      }
+                                      else return true
+                                      )
+                                      ]
+file Upload: Multer Library => npm i multer
+            import multer from 'multer';
+
+            // Configure storage
+            const storage = multer.diskStorage({
+              destination: (req, file, cb) => {
+                cb(null, 'uploads/'); // Destination folder
+              },
+              filename: (req,file,cb)=>{
+                const name = Date.now()+"-"+file.originalname;
+                cb(null,name);
+             }
+            });
+
+            // Create multer instance
+            const upload = multer({ storage: storage });
+
+            // Use multer in a route
+            app.post('/upload', upload.single('file'), (req, res) => { // `file` is the field name in which taking input
+              res.send('File uploaded successfully.');
+            });
+              // Path where the file was stored
+            const uploadedFileUrl = req.file.path;
+
+
+Session: Connect client & Server
+        Library: express-session (npm i express-session)
+        // Initializing session
+        server.use(session({
+               secret:"secret key",
+               resave:true,
+               saveUnutilized:true,
+               cookie:{secure:false}
+        }))
+
+  Login With session: we can set multiple keys like(id,emailid,name etc) and after access them
+                   req.session.userEmail = req.body.email;
+                   req.session.name = req.body.name;
+
+      accessing value = const InputEmail = req.session.userEmail ;
+                        if(InputEmail) {
+                        res.redirect("/login")
+                        }
+   Logout with session: we can clear session data to logout
+                     req.session.destroy(err=>{
+                     if(err){ console.log(err)}
+                     else{ res.redirect("/login") }
+                     })
+
+Cookies: Store data at browser at client side
+
+         npm i cookie-parser , import cookieParser from "cookie-parser";
+     index.js: app.use(cookieParser());
+              app.use(name);
+              
+      create: const name = (req,res,next)=>{
+              res.cookie('username', 'JohnDoe', 
+              { maxAge: 2*24*60*60*1000 });
+      }
+      
+      read: const username = (req, res) => {
+                             const username = req.cookies.username;
+                             }
+
+      delete: (req, res) => {
+               res.clearCookie('username');
+               res.send('Cookie has been cleared.');
+                      }
+--------------------------------------------------------------------------------------------------------------------------------
+Why not mvc: tight coupling(Everything is hardcoded,view directly relies on model data), commplexity as application grows.
+             Difficult to scale because of 100s of views,controller,models.
+             Difficult to make changes.
+
+Why Api: can provide service to all type of clients/devices,Here controller only sending data so can be used in diff clients.
+
+Types Of API: SOAP(old): Simple obj access protocol. It's heavy so slow and complex.
+              REST(mostly used): lightweight,Widely Used, fast, Easy to work.
+              GraphQl(better)
+    Note: these three are API Protocol for backend API construction.
+
+-------------REST (Represantation state transfer): Most Popular-------
+Restful API: Sending data in json/XML format.
+Representation of data: means how data is deliverd in response to client such as json/XML.
+Stateless or Sessionless architecture: it dosen't store client information so it don't use session.
+
+Benifits: simplicity, High Scalability, Interoperability(can use in any device),
+          Great support for caching(Ability to store most frequent used data for better response).
+
+Methods: get,post,put,delete
+
+Applications: Third party integration(can use third part API's like chatgpt), Back end API's(Own API Server),
+              MicroServices: can scale app like making diff. admin services & user services & distributing data on diff servers.
+
+Folder Structure: Src-> features -> cart -> cartModel.js, cartController.js, cartRoutes.js (make diff for all features)
+
+------------ Express Routes : express.Router() -------------------
+Instead of creating all routes in index.js file we can saperate all routes according to features.
+Ex: cartRoutes.js:
+                 import express from "express";
+                   const cartRouter = express.Router();
+                   cartRouter.get("/",cartController.allProducts()); // No need to define full path because redirecting accordingly.
+                   export default cartRouter;
+    index.js
+                 import cartRouter from "./cartRoutes.js"
+                 server.use("/api/cart",cartRouter); // All /api/cart request will be redirect here.
+
+------------ Creating Rest API ---------------------
+1). Model: create model class & a data array perform all CRUD operations on that & export class
+               productModel.js: cost data =[], export class productModel{ constructor(){}, allProducts(){return data}};
+
+2). Controller: create controller , import model class , receive data & took action
+               productController.js: export class productController{ allProducts(req,res)=>{res.send(productModel.allProducts())}};
+
+3). Router: create router for each feature. and use that route in index by exporting it in (server.use("/api/feature",productRoutes))
+               productRoutes.js: productRoutes.get("/all", productController.allProducts());
+
+------------- Post Request(body-parser) -------------------- : npm i body-parser
+** if we have to post data we have to parse it first
+
+: import bodyParser from "body-parser";
+  server.use(bodyParser.json())   // keep it in starting
+
+------------ Route & Query parameter ----------------------
+Route(params): server.get("/:id",middleware);
+               const id= req.params.id
+
+Query(query) : passing query in url: http://localhost:3000/api/product?id=10&price=200
+               Reterive data from url: const id = req.query.id;
+                                       const price = req.query.price
+
+----------------------------------- Securing Application-------------------------------------------
+    why security: For controlled Access, data Privacy
+
+Types: Basic Authentication, API Keys, O Auth(Open Authentication), JWT(json Web token).
+
+1). Basic Authentication:
+        Auth Middleware: 1* //Create Middleware for basic authentication
+        const auth = (req, res, next) => {
+        // Step 1: Get the Authorization header
+             const authHeader = req.headers['authorization'];
+        // Step 2: Check if the header exists
+             if (!authHeader) return res.status(401).send('No credentials provided');
+        // Step 3: Decode the Base64 credentials (format is "Basic base64(username:password)")
+             const credentials = Buffer.from(authHeader.split(' ')[1], 'base64').toString().split(':');
+             const [username, password] = credentials;
+         // Step 4: Validate username and password If valid, proceed to next middleware/route handler(next()) else send a 403 Forbidden response
+        }
+        2* //Protected route (only accessible if authenticated)
+           app.get('/protected', auth, (req, res) => {
+            res.send('Welcome to the protected route!');
+             });
+
+2). JWT Token (json web token): Encrypted(uses hashing technique),stateless(don't use session),easy to scale
+    npm i jsonwebtoken;
+    import jwt from "jsonwebtoken";
+Step-1: Create Token in login/signIn & store it in cookie
+       : jwt.sign(payload,SECRET_KEY,Sign in options);
+       => jwt.sign({ id: id, email: email },"jhjsdjjhe73278rwnbfu",{ expiresIn: '1h' });
+          req.cookie("jwt_token",token)
+
+Step-2: create middleWare to verify token by reterieve from cookie
+       const token = req.cookies.jwt_token;
+      try{ const data = jwt.verify(token,"jhjsdjjhe73278rwnbfu") }catch(err){console.log(err)}
+      next();
+
+step-3: use this middleware in every route which we want to secure.
+
+-----------------------API Documentation------------------
+* it helps to the customers to understand how to use API.
+npm install swagger-ui-express
+
+step-1: create json with all details
+
+"apiDocs":{
+     openapi: '3.0.0',
+    info: {
+      title: 'Simple API',
+      version: '1.0.0',
+      description: 'Simple API Documentation',
+    },
+    servers: [
+      {
+        url: 'http://localhost:3000',
+      },
+    ],
+    "paths": {
+    "/users": {
+      "get": {
+        "summary": "Get list of users",
+        "responses": {
+          "200": {
+            "description": "List of users",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer",
+                        "example": 1
+                      },
+                      "name": {
+                        "type": "string",
+                        "example": "John Doe"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+}
+
+Note: Configure each & every Api mehods like this in json
+
+step-2: update json
+import apiDocs from "./swaggerJson.js" asser{"type":"json"}
+import swagger from "swagger-ui-express";
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(apiDocs));
+
+-----------------------
+Handle non existing path: add this in last in server.js
+    server.use((req,res){ res.status(400).send("Not Available")});
+
+-----------------------
+CORS(Cross origin reuest sharing): npm i cors
+  import cors from "cors" , server.use(cors()); OR
+    const corsOptions = {origin:"http://localhost:3000", allowHeaders:*}, server.use(cors(corsOptions));
+
+----------------------
+Logger Middleware: Log every request so we can track activity. (Winston Library)
+
+import  winston from "winston"
+
+// Create a logger
+const logger = winston.createLogger({
+  level: 'info', // Log level (info, warn, error)
+  format: winston.format.json(), // Log format
+  transports: [
+    new winston.transports.Console(), // Output to console
+    new winston.transports.File({ filename: 'error.log' }), // Log errors to a file
+  ],
+});
+
+//Create logger middleWare
+const loggerMiddleWare = async(req,res,next)=>{
+ try{
+    const logData = JSON.Stringify(req.body);
+    logger.info(logData);
+    next();
+ }catch(err){console.log(err)}
+}
+
+//Use in server file
+server.use(loggerMiddleWare);
+
+---------------------------
+Error Handeling: 
+
+Application level Error handeling: 
+
+//create new Error class
+export class ApplicationErrors extends Error{
+    constructor(message,code){
+        super(message);
+        this.code = code
+    }
+}
+// Use this by importing it
+const error = new ApplicationErrors('Not Found', 404);
+
+//Use in server file :This should be last in server file
+server.use((err,req,res,next){
+    if(err instance of ApplicationErrors){
+        res.status(err.code).send(err.message);
+    }else{
+        res.status(500).send("Server Error");
+    }
+});
+
+//pass error in App level:
+try{} catch(err){next(err)}
+

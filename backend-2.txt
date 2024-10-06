@@ -1,0 +1,632 @@
+populate inside mongoose-
+export const getLikesRepo = async (id, on_model) => {
+  // Write your code here
+  const model = mongoose.model(on_model);
+  const like =await likesModel.find({likeable:new mongoose.Types.ObjectId(id),on_model:on_model}).populate('user').populate({ path: "likeable", model });
+  return like;
+};
+
+-------------------------------------------------------------------------------------------------------------
+Persistent storage: We need persistant sorage(Stay even after refresh);
+
+---------------Database(Tool which allow to store data)----------
+types: Relational,object oriented, nosql database, hierarchical Database
+
+Relational database: Stores data in fromat of table. has strict strict structure, predictable database,Performance issue with large db.
+no sql: Manage Unstructured data , no fixed schema, difficult to predict,Better with large dataset because it supports complex structures.
+
+-------------------MongoDb--------------
+mongoDb compass: A ui tool to visualize mongoDB database.
+
+collection: A collection of multiple document Ex; users collection
+document : multiple enteries inside collection Ex: multiple user inside collection.
+Attribute: Key value pair inside a document.
+
+-------------------CRUD inside MONGOSH(mongoDB)-------------
+Mongosh: used to test inside command Prompt
+
+mongosh               //start command
+show all dbs          // view all collection
+use bookDb            //Select bookDb
+           OR
+db.collection("bookDb").insertOne({item:""book})        //creates & insertOne
+
+types: 
+       Create/insert: insertOne(), insertMany({})
+       read: findOne(), find({}).toArray();
+       update: updateOne(filter, data) ,updateMany(filter,{$set:{author:"Sagar"}});     //$set is used to update many fields
+       replace: replaceOne(filter , data);                                              //replace the whole document
+       delete: deleteOne(filter); deleteMany(filter);
+
+---------------Connect mongoDB to server( mongoClient )-------------------
+npm i mongodb
+import {mongoClient} from "mongodb";
+const URL = "mongodb://localhost:2700/ecomDb";
+let Client;
+export const ConnectToMongoDb = ()=>{
+    mongoClient.connect(URL)
+    .then(data => {client = data ; console.log("Connected to mongoDB") })
+    .catch(err=> console.log(err))
+}
+
+export const getDB = ()={                          //By this we can access data everywhere by importing it
+  return client.getDB();
+}
+
+****Inside another module
+ import getDB from "./middleware/mongoDB.js";
+
+ const db = getDB();
+ db.collection("user").find({}).toArray();    // Perform CRUD As per need
+
+ -----------------------------Repository Pattern------------------------
+ Instead of performing all db orerations inside MODEL we can create new repository.js file to saperate all db operations.
+ Use model for only schema/user class (coonstructor).
+
+ step: model(for schema/class) -> repository(for db CRUD) -> controller(for controlling repository) -> routes(for diff routes)
+
+------------------------------Password hashing(bcrypt)-------------------
+npm i bcrypt;
+
+inside signup: const hashedPassword = await bcrypt.hash(password,12);   //here 12 is SaltCount we can use b/w 10-20. More count more secure but it takes more time
+
+inside login = const user = db.collection("user").find({email:req.body.email})
+              const result = await bcrypt.compare(req.body.password, user.password);    //It will return true/False
+
+-----------------------------Using ENV file (dotenv)--------------------------
+1). npm i dotenv
+2). Create .env folder at root folder
+3). configure env in server file:
+                                  import dotenv from "dotenv"
+                                  dotenv.config();                    //Use this in very starting os server file
+4). create keys:
+                 DB_URL = mongodb://localhost:2700/ecomDb
+                 JWT_SECRET_KEY = jdeu389dnhcjhdmie8
+
+5) Access key: const key = process.env.DB_URL;
+
+Note: create this const inside server file function (mongoDB/mongoose) not outside;
+
+------------------------------find by id / All-------------
+
+db.collection.findOne({id:ObjectId(id)})
+db.collection.find({}).toArray();
+
+--------------------------------Comparision Operators-------------------
+$eq(equal to), $gt, $lt, $lte, $gte, $ne(not equal), $in(match in array), $nin(not match value in array).
+
+Ex: async(maxprice,minprice){
+    const Filterprice = {};
+    if(maxPrice){ Filterprice.price = {$lte: parceFloat(maxPrice)}}  //It will filter price less then given price
+}
+
+----------------------$PUSH & $Pull---------------------------
+Push: if we have nested object then we use push items. 
+          Ex: await collection("Product").updateOne({_id:new ObjectId(id)},
+                                         {$push:{ratings:{_id:new ObjectId(id)},rating}}); 
+        //It will push items inside Product's rating object.
+
+Pull:  if we have nested object then we use push items. 
+          Ex: await collection("Product").updateOne({_id:new ObjectId(id)},
+                                         {$pull:{ratings:{_id:new ObjectId(id)}}}); 
+        //It will pull items inside Product's rating object.
+
+
+------------------Upsert(Update if available Otherwise create document)-----------------
+
+await collection("Product").updateOne({product:product)},
+                                         {$inc:{quantity:quantity}});
+
+
+------------------Modify Id------------------------------------
+Note: it's recommend not to modify id but if we want to modify then follow these steps-
+
+1). Create a new collection name counter/anything with 
+            {name:"CartItemId",value:0};
+2). by creating new cart increment the count by($inc) & pass the reterived id in new cart item's (_id);
+
+------------------------Indexes--------------------------
+index in MongoDB is a data structure that improves the speed of data retrieval operations on a collection.
+We can reterive data much faster if we use Indexes in our Application.
+Indexes are like shortcut that makes finding data faster.without index MongoDB has to look through every document in collection which can be slow.
+
+---------------------------------------
+Note: 1 for assending, -1 for decending
+
+**Step to create Indexes inside MONGODB:
+
+      db.users.createIndex({ email: 1 });  // Create a single-field index on the 'email' field
+
+      db.users.createIndex({ lastName: 1, firstName: 1 });  // Create a compound index on 'lastName' and 'firstName'
+
+--------------------------------------
+**Step to create Indexes inside mongoose:
+
+        const userSchema = new mongoose.Schema({
+            name: { type: String, index: true }, // Single-field index
+            email: { type: String, unique: true }, // Unique index
+            age: { type: Number }
+        });
+         
+        userSchema.index({ age: 1, name: 1 }); // Create a compound index on 'age' and 'name'
+
+----
+Types: single index, Compound Index, text Index
+
+------------------------------------------MONGODB Operators--------------------
+1). Comparision Operators: $eq(equal to), $gt, $lt, $lte, $gte, $ne(not equal), $in(match in array), $nin(not match value in array).
+                         Ex: db.users.find({ age: { $lt: 50 } });
+
+2). Logical Operators: $and, $or, $not
+                    Ex: db.users.find({ $and: [{ age: { $gte: 18 } }, { city: "New York" }] });    //and(Both should satisfy)
+                        db.users.find({ age: { $not: { $gte: 21 } } });
+
+3). Element Operators: $exists, $type
+                     Ex: db.users.find({ email: { $exists: true } });
+                         db.users.find({ age: { $type: "int" } });
+
+4). Array Operators : $in, $all, $elemMatch
+                     Ex:db.users.find({ scores: { $elemMatch: { $gt: 80, $lt: 90 } } });
+
+5). Projection Operators : $slice 
+                       Ex: db.users.find({}, { tags: { $slice: 2 } }); // Limit to first 2 elements of the tags array
+
+------------------------------------------------ Select / Projection -------------------------------
+
+collection.find({ name: name }, { projection: { email: 1, age: 0 } }).toArray();
+
+select:
+       User.find({ name: 'John Doe' }).select('email age')
+                  .exec((err, users) => {
+                          if (err) throw err;
+                          console.log(users);
+                      });
+
+---------------------------------------------------Aggregation PipeLine------------------------------
+If we want to get insights about our data like: 
+                                               Top selling Products,Avg rating, Avg Product
+
+Ex: db.products.aggregate([
+    {
+        $group: {
+            _id: "$category", // Group by category
+            avgPrice: { $avg: "$price" }, // Calculate average price
+            products: { $push: "$$ROOT" } // Push the entire document into an array
+        }
+    }
+]);
+
+.aggregate([])  :: Used to make aggregate Operators
+$group  :: it will group all the products based on _id:"product/anything". we can pass anything in _id to filter.
+$avg:price :: it will calculate the average of price tag of each group.
+$push:$$ROOT :: it will return the whole document according to the group filter.
+
+----------Aggregate in Nested Json(Unwind)
+
+Unwind : it will break the array in diff objects so it will be easy to work with
+        Ex: db.orders.aggregate([
+    {
+        $unwind: "$items" // Deconstruct the items array
+    },
+    $group: {
+            _id: "$category", // Group by category
+            avgPrice: { $avg: "$price" }, // Calculate average price
+            products: { $push: "$$ROOT" } // Push the entire document into an array
+        }
+]);
+
+------------$cond : it's like if else
+It functions like an if-else statement, allowing you to return different values based on a condition.
+
+Ex: db.products.aggregate([
+    {
+        $project: {
+            name: 1,
+            price: 1,
+            category: {
+                $cond: {
+                    if: { $gt: ["$price", 150] }, // Condition: price > 150
+                    then: "Expensive",            // If true
+                    else: "Cheap"                 // If false
+                }
+            }
+        }
+    }
+]);
+
+
+-----------------------------------------------------Transactions in mongoDB-------------------------------
+Transactions allow multiple operations to be executed as a single unit of work. 
+if one operation fail whole changes revert.
+
+Ex: const session = client.startSession();
+  try{
+    session.startTransaction();
+// Perform All database Operations & pass session
+    await collection.insertOne(doc, { session });   //Pass session in every step 
+    await collection.updateOne(query, update, { session });
+    
+    //Commit changes
+    await session.commitTransaction();
+    await session.endSession();
+  }catch(err){
+    await session.abortTransaction();
+    await session.endSession();
+  }
+
+---------------------------------------------------Mongoose-----------------------------------
+Mongoose is an ODM (Object Data Modeling) library for MongoDB and Node.js.
+npm i mongoose
+
+//Create Configuration file----------------------------------------
+import mongoose from "mongoose";
+export const connectUsingMongoose = async()=>{
+    try{
+        await mongoose.connect('mongodb://localhost:27017/database', { useNewUrlParser: true, useUnifiedTopology: true });
+        console.log("Connected using mongoose");
+    }catch(err){
+        console.log(err)
+    }
+}
+
+server.listen(3000,()=>{
+    console.log("Server is running at 3000");
+    coonnectUsingMongoose();
+});
+
+//Create Schema --------------------------------------------------
+A schema is like a blueprint for your data. It defines the structure of documents in a database, including what fields (like name, age) they have and what types of data those fields can hold (like string, number).
+const userSchema = new mongoose.Schema({
+  name: String,
+  email:{type:String , unique:true},
+  age: Number,
+  type:{type:String , enum:["customer","seller"]}
+});
+
+enum: It is used to check if enterd value matches the predefined values ornot. It only takes only predefined values.
+
+//Include ObjectId and their collection----------------------------------------
+productId:{type:mongoose.Types.ObjectId , ref:"users"}, (Unique id referd to collection name);
+
+//Create Model to perform operations -------------------------------------------
+const userModel = mongoose.model("user",userSchema) //(collection Name, schema);
+
+//Perform Crud Operations on Model ---------------------------------------------
+const newUser = new userModel({name:name,email:email})
+await newUser.save();                                    //Create
+
+await User.find({});                                     //Read
+await User.updateOne({ name: 'Alice' }, { age: 26 });    //Update
+
+await User.deleteOne({ name: 'Alice' });                 //delete
+
+//All Methods --------------------------------------------------------------------
+findById: Find a document by its ID.
+findByIdAndDelete: Find a document by its ID and delete it.
+findByIdAndRemove: Find a document by its ID and remove it.
+findOne: Find a single document that matches a query.
+findOneAndUpdate: Find a single document and update it.
+findOneAndDelete: Find a single document and delete it.
+findOneAndRemove: Find a single document and remove it.
+updateOne: Update a single document that matches a query.
+updateMany: Update multiple documents that match a query.
+deleteOne: Delete a single document that matches a query.
+deleteMany: Delete multiple documents that match a query.
+
+//Custom Validators ------------------------------------------------------------
+age: {
+  type: Number,
+  validate: {
+    validator: (v) => v >= 0,
+    message: 'Age must be positive!'
+  }
+}
+
+// Relationshops in mongoose --------------------------------------------------
+
+1). One-to-One Relationship
+        Definition: One document in a collection is related to one document in another collection.
+        Example: User and Profile.
+        Implementation:
+            Reference: Use ObjectId to reference the related document.
+                        const UserSchema = new mongoose.Schema({
+                         name: String,
+                         profile: { type: mongoose.Schema.Types.ObjectId, ref: 'Profile' }
+                        });
+            using:  A User can have only one Profile.
+
+                  async function createUserWithProfile() {
+
+                    // Create a new profile document with bio and age
+                   const profile = await Profile.create({ bio: 'Developer', age: 30 });
+
+                   // Create a new user document, linking it to the profile by storing the profile's ObjectId
+                    const user = await User.create({ name: 'Alice', profile: profile._id });
+                    console.log('User created:', user);
+                    }
+
+
+---------------------one to many-------------
+One-to-Many Relationship
+Definition: One document in a collection is related to multiple documents in another collection.
+Example: Author and Books.
+Implementation:
+        Reference: Use an array of ObjectIds in the parent document.
+                      const BookSchema = new mongoose.Schema({
+                        title: String,
+                        author: { type: mongoose.Schema.Types.ObjectId, ref: 'Author' }
+                      });
+                      
+                      const AuthorSchema = new mongoose.Schema({
+                        name: String,
+                        books: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Book' }]
+                      });
+        Usage: An Author can have multiple Books.
+
+                async function createAuthorWithBooks() {
+                  // Create a new author document
+                  const author = await Author.create({ name: 'John Doe' });
+                
+                  // Create new book documents, linking them to the author
+                  const book1 = await Book.create({ title: 'Book One', author: author._id });
+                  const book2 = await Book.create({ title: 'Book Two', author: author._id });
+                
+                  // Add book references to the author's books array
+                  author.books.push(book1._id, book2._id);
+                  await author.save();
+                
+                  // Log the created author object to the console for verification
+                  console.log('Author with books:', author);
+                }
+
+ ----------------------Many to many ---------------------------
+ Many-to-Many Relationship
+Definition: Multiple documents in one collection are related to multiple documents in another collection.
+Example: Students and Courses.
+         Implementation:
+              Reference: Use arrays of ObjectIds in both collections.
+
+                     const CourseSchema = new mongoose.Schema({
+                       title: String,
+                       students: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Student' }]
+                     });
+                     
+                     const StudentSchema = new mongoose.Schema({
+                       name: String,
+                       courses: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Course' }]
+                     });
+        
+         Usage: A Student can enroll in multiple Courses, and a Course can have multiple Students.
+                
+                async function enrollStudentInCourses() {
+                  // Create a new student document
+                  const student = await Student.create({ name: 'Jane Smith' });
+                
+                  // Create new course documents
+                  const course1 = await Course.create({ title: 'Math 101' });
+                  const course2 = await Course.create({ title: 'History 201' });
+                
+                  // Add course references to the student's courses array
+                  student.courses.push(course1._id, course2._id);
+                  await student.save();
+                
+                  // Add student reference to each course's students array
+                  course1.students.push(student._id);
+                  await course1.save();
+                
+                  course2.students.push(student._id);
+                  await course2.save();
+                
+                  // Log the created student object to the console for verification
+                  console.log('Student enrolled in courses:', student);
+                }
+                
+
+SUMMERY: One-to-One Relationship:
+Create a User model and a Profile model. When creating a user, save the user's ID in the profile model to link them.
+
+One-to-Many Relationship:
+Create an Author model and a Book model. When creating books, save the author's ID in each book and add the book IDs to the author's book list.
+
+Many-to-Many Relationship:
+Create a Student model and a Course model. When enrolling students in courses, save the student IDs in each course and add the course IDs to the students' course lists.
+
+-----------------------------------------Multiple References Using refPath-------------------------------
+Case: Suppose we have a Comment model that can belong to either a Post or a Photo.
+
+Ex: // Comment model with refPath
+    const CommentSchema = new mongoose.Schema({
+      content: String,
+      commentableId: { type: mongoose.Schema.Types.ObjectId, required: true },
+      commentableType: {
+        type: String,
+        required: true,
+        enum: ['Post', 'Photo'], // Allowed types
+      },
+      // Use refPath to dynamically reference the commentable type
+      refPath: 'commentableType',
+    });
+
+    // Create a comment for the post
+    const postComment = await Comment.create({
+    content: 'Great post!',
+    commentableId: post._id,
+    commentableType: 'Post',
+    });
+
+----------------------------------------Populate---------------------
+populate inside mongoose-
+export const getLikesRepo = async (id, on_model) => {
+  // Write your code here
+  const model = mongoose.model(on_model);
+  const like =await likesModel.find({likeable:new mongoose.Types.ObjectId(id),on_model:on_model}).populate('user').populate({ path: "likeable", model });
+  return like;
+};
+
+-----------------------------------Mongoose Middleware Hooks---------------------------------
+1. Pre Middleware
+Definition: Runs before a specific operation (e.g., save, remove).
+Usage: Useful for validating or modifying data before saving.
+
+Example:
+    UserSchema.pre('save', function(next) {
+      // Modify or validate the document before saving
+      this.name = this.name.trim();
+      next(); // Proceed to the next middleware or save
+    });
+
+2. Post Middleware
+Definition: Runs after a specific operation (e.g., save, remove).
+Usage: Useful for performing actions after the operation, like logging or cleanup.
+
+Example:
+    UserSchema.post('remove', function(doc) {
+      // Perform actions after the document is removed
+      console.log(`User ${doc.name} has been deleted.`);
+    });
+
+
+Summary:
+    Pre Middleware: Executes before an operation; used for data manipulation.
+    Post Middleware: Executes after an operation; used for follow-up actions.
+
+
+------------------------Socket & socket Programming (npm install socket.io)----------------------------
+if we want to send notification to client in rest API we have to send request continuously to check for notification.
+This is an issue and to avoid it we use Socket programming 
+
+Socket
+       Definition: A socket is a connection point between two devices for communication.
+
+Socket Programming
+        Definition: Writing code to create connections between devices for data exchange.
+
+Applications of Socket Programming
+
+Real-time chat applications
+       Online games
+       Video/voice calls
+       File sharing
+       
+Disadvantages
+       Can be complex to manage connections
+       Requires handling network issues
+       Not suitable for very large-scale apps without optimization
+
+server.js file:
+               import http from "http";
+               import Server from "socket.io"
+               import cors from "cors"
+               import express from express;
+
+               const app= express();
+               const server= http.createServer();
+               const io = new Server(server, {
+                 cors: {
+                   origin: '*',
+                   methods: ['GET', 'POST']
+                 }
+               });
+               io.on('connection', (socket) => {
+                 console.log('A user connected');
+                 
+                 socket.on('message', (data) => {
+                   console.log('Message from client:', data);
+                   io.emit('message', data);
+                 });
+               
+                 socket.on('disconnect', () => {
+                   console.log('User disconnected');
+                 });
+               });
+               
+               server.listen(3000, () => {
+                 console.log('Server running on port 3000');
+               });
+index.html file:
+              <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+          <script>
+            const socket = io('http://localhost:3000');
+            socket.on('message', (data) => {
+              console.log('Message from server:', data);
+            });
+            socket.emit('message', 'Hello from client');
+          </script>
+
+Summary of Steps:----------------------
+
+Create server:         Use http.createServer() to create a server.
+Initialize socket:     Create an io instance using new Server(server).
+CORS setup:            Pass CORS options to the io instance.
+Add event listener:    Use io.on('connection', ...) to handle client connections.
+Listen for events:     Inside the connection handler, listen for custom events like socket.on('message', ...).
+Emit events:           Send data to all clients using io.emit(...).
+Handle disconnection:  Use socket.on('disconnect', ...) to handle client disconnections.
+Start server:          Use server.listen(...) to run the server on a specific port.
+
+--------------------------------Save chat on DB-----------------------
+io.on('connection', (socket) => {
+  console.log('A user connected');
+
+  // Retrieve chats when a user connects and sent this at chatHistory 
+  getChats().then(chats => {
+    socket.emit('chatHistory', chats);
+  });
+
+  // Save new chat message
+  socket.on('sendMessage', async (data) => {
+    const { username, message } = data;
+    await saveChat(username, message);
+    io.emit('message', { username, message }); // Broadcast the new message to all clients
+  });
+
+  socket.on('disconnect', () => {
+    console.log('User disconnected');
+  });
+});
+
+
+------------------------------- Task Runners(optional) --------------------------
+A task runner is a tool that automates repetitive tasks in the development process, such as minification, compilation, linting, and testing.
+Why Use a Task Runner?
+
+    Automation: Saves time by automating repetitive tasks.
+    Consistency: Ensures tasks are performed the same way every time.
+    Efficiency: Improves workflow and reduces human error.
+
+1). grunt task runner:
+    Definition: Grunt is a JavaScript task runner that uses a configuration file (Gruntfile.js) to define tasks.
+
+Example:
+      // Gruntfile.js
+      module.exports = function(grunt) {
+        grunt.initConfig({
+          pkg: grunt.file.readJSON('package.json'),
+          uglify: {
+            dist: {
+              files: {
+                'dist/output.min.js': ['src/*.js']
+              }
+            }
+          }
+        });
+      
+        grunt.loadNpmTasks('grunt-contrib-uglify');
+        grunt.registerTask('default', ['uglify']);
+      };
+
+2). Gulp task runner:
+  Definition: Gulp is a streaming build system that uses a code-over-configuration approach, allowing developers to write tasks in JavaScript.
+
+Example:
+    // gulpfile.js
+    const gulp = require('gulp');
+    const uglify = require('gulp-uglify');
+    
+    gulp.task('minify-js', () => {
+      return gulp.src('src/*.js')
+        .pipe(uglify())
+        .pipe(gulp.dest('dist'));
+    });
+    
+    gulp.task('default', gulp.series('minify-js'));

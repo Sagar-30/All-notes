@@ -1,0 +1,53 @@
+git: version control system.(We can go forward & backward in our code if any issue occurs)
+
+Note: Git takes snapshot of all the changes and keep them for future refrences
+
+Git commit Commands: git init -> initialize an empty repository
+          git status -> shows the changed files if they are untracked or saved
+          git diff -> shows all changed code instead of changed file
+          git add . -> save the all chaged files/ create snapshot of changes
+          git commit -m "Your message" -> commit take the changes and give the name of those changes 
+          git log -> All logs of changes with an log id
+          git checkout _id -> we can go to perticular commits and see the older/newer code in text editor by id
+
+** Head => head points to the current commit if we checkout head points to that perticular version
+
+Git branches: If multiple teams are working on same code then we create branches
+             default main branch is "master"
+             git branch : shows all the branches and tells where head is pointing
+             git branch -r -> shows all hidden branches
+             git checkout master -> set head to the latest commit
+
+Create branch: git checkout -b branch_name -> it will create branch with given name and points heads towards it
+
+Merge branches : git merge branch_name
+
+delete unwanted branches : git branch -d branch_name
+
+Conflicts in code: if two teams change the same line of code then it asks to change it then only it will merge the branch
+
+Git workflows: There are multiple type of workflows:
+             Centralized Workflow: Everyone pushes changes to a central repository. Simple but can lead to conflicts.
+
+             Feature Branch Workflow: Each new feature is developed in its own branch. This keeps the main code clean until the feature is ready.
+
+             Git Flow workflow: A structured approach with specific branches for features, releases, and hotfixes. It helps organize the development process.
+
+             Forking Workflow: Developers fork the main repository, work on their own copy, and then submit changes (pull requests) back to the main repo.
+
+Configuration: git config user.name "Sagar";
+               git config user.email "sagar302001@gmail.com";
+
+Push on github.com: git remote add origin https://github.com/saga302001/notes -> add all files on remote repository
+                    git push -u origin master -> push the master branch on remote
+
+Clone: git clone URL -> copy the Project in directory 
+
+
+fork: we can copy the project in our repo by using fork option of main project
+
+Pull request: A pull request (PR) is a way to propose changes to a codebase in Git, typically used in collaborative environments.
+             if user fork project in his repo and make changes in it he can raise a pull request from github.com.
+             Other team members can review your code, suggest changes, or approve it.
+
+Open source to contribute: osem (goto issues section)

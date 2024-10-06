@@ -1,0 +1,303 @@
+Framework: prewritten code/classes which we can use in our project
+
+Include bootstrap: css:
+                       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+                   js:
+                        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+Rebooted Typography: It is a set of CSS styles that improves the way text looks on web pages.
+
+Heading Styles:: h1-h6 : we can use bootstrap heading styles by just using tag name as class name 
+                   <h1 class="h1">bootstrap h1 class</h1>
+
+            class: display-1 to display-6 : diff heading style classes
+                   <h1 class="display-6">bootstrap h1 class</h1>
+
+Paragraphs & Text Elements::  <strong>, <em>, and <blockquote>
+
+-------------------Text Utilities-----------------------------
+
+1).Text Alignment:
+
+.text-start
+.text-center
+.text-end
+
+Ex: <p class="text-center>Hello</p>
+
+2).Text Decoration:
+
+.text-decoration-none
+.text-decoration-underline
+.text-decoration-line-through
+
+3).Text Transformation:
+
+.text-lowercase
+.text-uppercase
+.text-capitalize
+
+4).Font Weight & Italics:
+
+.fw-normal
+.fw-bold
+.fw-light
+.fst-italic
+.fst-normal
+
+5).Font Weight & Italics:
+
+.fw-normal
+.fw-bold
+.fw-light
+.fst-italic
+.fst-normal etc.
+
+6).Font Size:
+
+.fs-1 to .fs-6
+
+7).Line Height:
+
+.lh-1
+.lh-sm
+.lh-base
+.lh-lg
+
+See in documentation more
+
+--------------------------------Breakpoints and container--------------------------------
+Bootstrap follows Mobile first approach
+
+Container:container in Bootstrap is a layout element that wraps your website's content and provides structure. It helps to keep your content neatly aligned and responsive across different screen sizes.
+          give main div class container
+
+**Breakpoints Sizes:
+xs: Extra small devices (portrait phones, less than 576px)
+sm: Small devices (landscape phones, 576px and up)
+md: Medium devices (tablets, 768px and up)
+lg: Large devices (desktops, 992px and up)
+xl: Extra large devices (large desktops, 1200px and up)
+xxl: Extra extra large devices (larger desktops, 1400px and up)
+
+**Fixed-width container:
+.container: Provides a responsive fixed-width container based on the current breakpoint.
+
+**Fluid container:
+.container-fluid: Always 100% wide, spanning the entire width of the viewport.
+
+**Responsive containers:
+.container-sm: Fixed-width container for small devices (min-width: 576px)
+.container-md: Fixed-width container for medium devices (min-width: 768px)
+.container-lg: Fixed-width container for large devices (min-width: 992px)
+.container-xl: Fixed-width container for extra large devices (min-width: 1200px)
+.container-xxl: Fixed-width container for extra extra large devices (min-width: 1400px)
+
+----------------------------------------------------- Grid system ------------------------------------------
+Grid Layout:
+Rows: Divide content horizontally. Use .row.
+Columns: Divide rows into columns. Use .col.
+
+Note: there are 12 hardcoded column but we can use as many as we want   
+
+Responsive Breakpoints:
+
+.col-sm (≥576px)
+.col-md (≥768px)
+.col-lg (≥992px)
+.col-xl (≥1200px)
+.col-xxl (≥1400px)
+
+Column Sizes:
+Use .col-1 to .col-12 to define column width (out of 12).
+
+Auto Layout Columns:
+Use .col for equal-width columns.
+
+Nesting:
+Rows can be nested inside columns.
+
+Offset Columns:
+Use .offset-* to create space before columns.
+
+Gutters:
+Control spacing between columns using .g- classes (e.g., .g-3).
+
+Example:
+<div class="container">
+  <div class="row">
+    <div class="col-md-6">Column 1</div>
+    <div class="col-md-6">Column 2</div>
+  </div>
+</div>
+
+
+
+-----------------------------Display and spacing-------------------
+Spacing Utilities (Margin & Padding)
+Margin:
+.m-{value}: Sets margin on all sides.
+.mt-{value}: Top margin.
+.mb-{value}: Bottom margin.
+.ms-{value}: Left margin (start).
+.me-{value}: Right margin (end).
+
+Padding:
+.p-{value}: Sets padding on all sides.
+.pt-{value}: Top padding.
+.pb-{value}: Bottom padding.
+.ps-{value}: Left padding (start).
+.pe-{value}: Right padding (end).
+
+Values:
+Values range from 0 to 5, where 0 is no spacing and 5 is the largest.
+
+Display Utilities:------------
+
+Block/Inline Display:
+.d-block: Display as block.
+.d-inline: Display as inline.
+.d-inline-block: Display as inline-block.
+
+Hide/Show:
+.d-none: Hide element.
+.d-{breakpoint}-block: Show block element on specific breakpoints (e.g., .d-sm-block).
+
+Flex Utilities:
+.d-flex: Display as flexbox.
+.d-inline-flex: Inline flexbox.
+
+--------------------------------------------Button and alerts--------------------------------
+Buttons Utilities:-------------
+
+
+Note use class "btn" for give button structure 
+Button Types:
+.btn-primary: Blue button.
+.btn-secondary: Gray button.
+.btn-success: Green button.
+.btn-danger: Red button.
+.btn-warning: Yellow button.
+.btn-info: Light blue button.
+.btn-light: White button.
+.btn-dark: Black button.
+
+Button Sizes:
+.btn-lg: Large button.
+.btn-sm: Small button.
+
+Block Button:
+.btn-block (Full-width button).
+
+Outline Buttons:
+.btn-outline-primary (Outline version of the button).
+
+Alerts Utilities:-------------------
+
+Alert Types:
+.alert-primary: Blue alert.
+.alert-secondary: Gray alert.
+.alert-success: Green alert.
+.alert-danger: Red alert.
+.alert-warning: Yellow alert.
+.alert-info: Light blue alert.
+.alert-light: White alert.
+.alert-dark: Black alert.
+
+Dismissible Alerts:
+Add .alert-dismissible with a close button (<button> with .btn-close).
+
+Alert Links:
+Alerts automatically style links with .alert-link inside the alert.
+
+------------------------------Cards and Modals -----------------------------------
+Cards Utilities:---------------
+
+Basic Structure:
+.card: Wraps the entire card.
+.card-body: Contains the main content of the card.
+
+Card Header & Footer:
+card-header: Adds a header to the card.
+.card-footer: Adds a footer to the card.
+
+Card Titles and Text:
+.card-title: For card title text.
+.card-text: For regular text inside the card.
+
+Card Image:
+.card-img-top: Adds an image to the top.
+.card-img-bottom: Adds an image to the bottom.
+
+Card Layouts:
+.card-group: Groups multiple cards together.
+.card-deck: Deck layout for cards.
+
+Modals Utilities:-----------------------------
+
+Modal Structure:
+.modal: Wraps the modal component.
+.modal-dialog: Wraps the content inside the modal.
+.modal-content: Defines the content inside the modal.
+
+Modal Header, Body, and Footer:
+.modal-header: For the modal title.
+.modal-body: Contains the main content.
+.modal-footer: Contains footer buttons.
+
+Show/Hide Modal:
+Use attributes like data-bs-toggle="modal" and data-bs-target="#exampleModal" to trigger the modal.
+
+Modal Sizes:
+.modal-lg: Large modal.
+.modal-sm: Small modal.
+
+Note: Cards are used to display grouped content, and modals create pop-up windows for extra information or actions.
+
+
+
+------------------------------Forms and inputs ------------------------------------------
+### Forms Utilities
+
+1. **Basic Form:**
+   <form>: Standard form element.
+   .form-control: Applied to <input>, <textarea> for styled inputs.
+
+2. **Form Groups:**
+   .mb-3: Adds margin to form group (space between inputs).
+   .form-group: Groups label and input.
+
+3. **Form Labels:**
+   <label>: Describes the input field.
+
+4. **Form Layouts:**
+   .form-inline: Makes form elements display inline.
+   .row & .col: For horizontal form layout.
+
+5. **Form Validation:**
+   .is-valid: Green border for valid inputs.
+   .is-invalid: Red border for invalid inputs.
+
+---
+
+### Input Utilities
+
+1. **Input Types:**
+   <input type="text">, <input type="email">, <input type="password"> for different input types.
+
+2. **Input Sizes:**
+   .form-control-lg: Large input field.
+   .form-control-sm: Small input field.
+
+3. **Input States:**
+   .disabled: Disables the input.
+   .readonly: Makes input read-only.
+
+4. **Checkbox and Radio:**
+   .form-check: Wraps checkboxes and radio buttons.
+   .form-check-input: Applies to checkboxes and radios for styling.
+
+5. **Input Groups:**
+   .input-group: Used to add addons (like buttons) to inputs.
+
+These utilities style and organize forms and inputs in a responsive and user-friendly way.
