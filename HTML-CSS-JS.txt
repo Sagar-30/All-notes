@@ -1,0 +1,1243 @@
+Domain name works =>
+
+www.google.com => url
+google.com => Domain name
+Note - it's hard to remember ip address of server so there is dns(domain name system) which is corresponded to particular IP address;
+
+Architecture=>
+browser search => isp(Internet service provider) => dns(domain name search) => Give Ip address => connected to website.
+
+HTML =>
+
+Paired tags -><h1></h1>
+unpaired / empty tags -> <br /> <hr />
+
+Element => <h1>Sagar</h1>
+
+
+
+-------------------------------------------------------------------------------
+semantic tags- <header> <footer> <main> <nav> <section> <article> <aside> <details>(<summary> (they give meaning to our content)
+
+figure & figcaption=> this gives description about our images
+
+Ex - <figure>
+       <img src = ''>
+       <figcaption>image 1</figcaption>
+      </figure>
+
+meta tags => 
+attribute - name,content
+Ex - <meta name="viewport" content="width=device-width initial-scale=1.0"/>
+<meta name="description" content="description about website"/>
+<meta name="keywords" content ="beach,resort"/>
+<meta name="author" content = "Sagar Kaushik" />
+
+link tag=>
+attribute - rel,type,href
+Ex- <link rel="icon" type="image/icon" href="" />
+
+----------------------------------------------
+CSS
+inline,internal,external
+
+inline prefer over intenal & external
+Note- agar internal Pehle likhi hai aur external baad mein toh external ko preference milega kyuki code top to bottom run hota hai aut jo baad mein aayega voh apply hoga
+
+
+
+margin:
+In horizontal margin does not adds in vertical it adds
+
+
+inline and block-
+
+Note - we can't change width and height of container in display inline. It accuire content width and height if we want to change width and height we can set display as inline-block.
+
+vertical-align: top;
+
+----------------
+list styling==>
+
+list-style-type,list-style-image,list-style-position,list-style:none outside;
+
+----------------
+table styling==>
+
+border, border-collapse:collapse; width, height
+
+----------------
+Background-image:-
+background:url("https:abcjpg");
+    background-size:cover;
+    background-position:center;
+filter:brightness(80%);
+----------------
+**Combinators==> Combination of selectors
+1. decendent combinator => header a{} (All a inside header)
+2. child combinator => header > a{} (Only direct childerns)
+3. next sibling combinator => h1 + p{} (next p in same section will style)
+4. Subsequent-sibling combinator => h1 ~ p{} (All p after h1 in same section will style)
+
+**Universal and attribute selector
+Universal selector - *
+attribute selector - a[title]{} (a with title will be styled)
+                   - a[href=""]{} (with particular value of href will be styled)
+                   - a[href ^="https"]{} (with particular Starting value of href will be styled)
+                   - a[href $=".com"]{} (with particular Ending value of href will be styled)
+                   - a[href ^="https"][href $=".com"]{}(Check starting and ending)
+
+**Pseudo classes - :(represented)
+p:first-child{} (agar p section ka first child hua tohi work krega)
+p:last-child{} (agar p section ka last child hua tohi work krega)
+p:only-child{} (agar p section mein akela child hua tohi work krega)
+p:nth-child(3){} (3rd p ko style krega)
+
+p:active{} (agar p pr click kr rakha hai toh)
+a:link{} (all links will be styled)
+a:hover{}
+a:visited{} (if link visited)
+a:valid{} (it works for form field. we can style accordingly)
+a:invalid{} (it also works for form fields)
+
+**Pseudo elements - :: (represented) (It is to style whole elements)
+
+p::after{content:"OK"} (It will add content after all p)
+P::before (It will add content before all p)
+P::first-line{font-weight:bold} (style all p first line)
+P::first-letter{font-weight:bold} (style all p first letter)
+input::placeholder (style all placeholders)
+
+** More then one class - class="class1 class2" (saperate by space)
+
+**filter property - use on images
+filter:opacity(50%);
+filter:blur(5px);
+filter:drop-shadow(10px 10px 10px red) =>for x,y,z axis shadow
+filter:hue-rotate(120deg) =>color palate change
+filter:invert(50%) =>change the colors
+
+  ** backdrop-filter: blur(5px);
+     backdrop-filter: sapia(80%); (black & white effect)
+
+**Gradient - 
+
+Linear gradient - background: linear-gradient(to bottom right, red, yellow);
+                  background: linear-gradient(125deg, red, yellow);
+Radial gradient - background: radial-gradient(red 5%, yellow 15%, green 60%);
+                  background: radial-gradient(circle, red, yellow, green);
+Conic gradients - background: conic-gradient(red, yellow, green, blue, black);
+                  background: conic-gradient(red 45deg, yellow 90deg, green 210deg);
+
+
+**Positions: static,relative,absolute,fixed,sticky
+static- by default how data loo in starting
+sticky- combination of fixed and relative(yeh apni orignal place page mein secure rakhta hai vha se htme ke baad bhi)
+
+
+** Float : left,right,inline-start,inline-end,none
+
+
+** Writing mode: 
+       writing-mode:vertical-lr; (it useful in designing layouts that support scripts traditionally written vertically, such as East Asian languages)
+
+** Sizing :
+     object-fit:cover; (to match the img size with div)
+     object-fit contain; 
+
+
+----------------
+Flex => flex-direction : column, row-reverse
+        justify-content : flex-start, flex-end , center, space-around, space-between, space-evenly
+        flex-wrap : wrap, nowrap, wrap-reverse(Change direction of axis)
+        align-content : flex-start, flex-end , center,stretch, space-around, space-between, space-evenly (Use align-content if you have multiple rows)
+        align-items : flex-start, flex-end , center, baseline (use align-items if you have only one row)
+
+Order => Change the order of elements how they appear
+         Note=> higher order will be in last
+        order:3;
+
+align-self => align indivisual item
+
+Gap => column-gap:2px, row-gap:2px
+
+Flex-grow =>  flex-grow:1 (jitne boxes ko flex-grow denge woh sabhi grow honge aadhe aadhe space mein accordingly)
+Flex-shrink => flex-shrink:2 (yeh jyada shrink hoga dusro se default flex-shrink 1 hota hai)
+
+Flex-basis: Agar div ke elements ko width nahi di toh flex-basis ka use krke assign kr skte hain (use in child)
+           flex-basis:200px;
+
+SHORTHANDS in Flex-
+
+flex-flow: direction+wrap
+Ex- flex-flow: row row-reverse;
+
+flex : flex-grow+ flex-shrink + flex-basis
+Ex- flex: 1 2 20px;
+
+
+------------------------
+Grid => Collection of vertical and horizontal lines and the gap b/w rows and colums is called gutter;
+
+**Cell -> single box
+**Gutter -> space b/w rows and columns
+** Grid Line -> border of any grid box
+** Trade -> Whole column in grid
+** grid area => A area in grid
+
+**grid-template-columns -> Create columns
+**grid-template-row -> create rows
+
+**fr(fractions) ==> grid-template-columns:1fr 1fr 1fr 1fr; (divide width in equal sizes in all screen sizes)
+
+
+**Repeat -> grid-template-columns:repeat(3,20%) =>Makes 3 section of 20% width
+
+
+**Grid-auto-rows -> grid-auto-rows:100px; (give height to all the rows)
+   minmax -> grid-auto-rows:minmax(50px,auto); (the min height will be 50px for each rows and max will be auto)
+
+Grid Alignment => 
+                  row-gap:20px;
+                  col-gap:20px;
+                  OR 
+                  gap:row-gap col-gap : 10px 20px;
+
+  ** Justify-items: end,start,center,stratch; (align items in end in each cell or acording to property)
+  **align items: works same as justify-content on Y axis
+
+**Place items= place-items:center;  (will work for both justify & place items)
+            OR place-items:center center;
+
+ **justify-content : flex-start, flex-end , center, space-around, space-between, space-evenly
+**align-content : flex-start, flex-end , center, space-around, space-between, space-evenly
+
+Place content = place-content:center;
+
+
+***Grid daptive layout -> grid-template-colums:repeat(auto-fit,minmax(200px,1fr))
+
+**Grid Column and Row-
+
+  grid-row-start:1;
+  grid-row-end:3
+  Note- start works with first line so in box there are two starting and ending line.so to cover 2 box we have to write 3;
+
+  grid-row: grid-row-start/grid-row-end
+  grid-row:1/3   OR 1/ span 2 (how many rows we want to sapn or cover)
+
+Note- Same for columns 
+
+Grid area=>
+
+grid-ara: grid-row-start/ grid-column-start/ grid-row-end/ grid-column-end
+  grid-area: 1/1/3/6
+
+Note =We can assign a name in 'grid-area' also and then we can make a template-
+grid-area:header;
+
+Ex- grid-template-areas:"header header" "nav main" "footer footer";  (give 4 divs names header,nav,main,footer and make template).
+
+
+---------------------------------------------
+
+Responnsive website-
+
+
+Viewport:- the entire screen in which output shown. But there will be issue in different screens so we use-
+
+      <meta name="viewport" content="width=device-width, initial-scale=1.0 "/>
+
+**media queries- @media
+
+   media-type: screen,print,all
+   media-features: width
+
+Ex- @media screen and (max-width:300px){}
+
+
+** Mobile first approach or Desktop first approach => for which we are designing first .
+  for EX- if we are making MFA(Mobile first approach) then we start writing for mobile and in media queries we write desktop logic.
+
+
+
+**Responsive typography:- Can use vw & vh to make text responsive (1vw = 1% of viewport)
+   Ex- h1{
+          font-size:6vw;
+          }
+
+    **vmin = select whichever is small either height or width of viewport
+    **vmax = select max number
+
+** Orientation : @media screen and (orientation){} (If screen width greater then height).
+** Aspect ratio : @media screen and (min-aspect-ratio:1/1){} (if height & width ratio is same).
+
+
+
+*** Container queries - based on container size we can write queries.
+
+    @container :
+Ex-
+    .main-section{
+                 container-type: inline-size;
+                 container-name ; article;
+                  OR
+                 container : name / type;
+                  }
+
+using - @container article(inline-size>500px){}
+
+
+------------------------------------------------
+** Animation -
+              1. Transition
+              2. Transform
+              3. Animation
+
+*Transition : transition b/w two elements
+
+    transition: property,duration , timing-function , delay
+
+  Transition timing function : Linear, ease in , ease out, ease-in-out, step-start , step-end, steps
+
+Ex - transition: all 2s ease-in-out;
+
+
+* Transform - translate(x,y),scale(x,y), rotate(angle), skew(x angle, y angle), 
+     Note=> we can also use it for only x or Y 
+      Ex- translateX(x), scaleX(x) etc.
+
+Mixing more then one:- transform: translate(50px, 100px) scale(1.2) rotate(45deg);
+
+
+3D Transform -> rotateX(),rotateY(),rotateZ()
+
+
+* Animation : animation-name, duration, timing-function, delay, iteration-count, direction, fill-mode, play-state
+
+Ex- .ball{
+      border:1px solid black;
+      border-radius:50%;
+      animation-name:slide;
+      animation-duration:1s;
+      animation-timing-function:ease-in-out;
+      animation-delay:1s;
+      animation-iteration-count:infinite;
+      animation-direction:alternate;
+      }
+
+    @keyframe slide(i.e animation-name){
+    from{
+         transform: translateX(0%)
+        }
+     to{
+         transform: translateX(350px)
+        }
+      }
+
+
+   ****fill-mode : forward,backward,both (after animation end where will it end?3)
+
+
+Animation shorthand:-> animation: slide 1s ease-in-out 1s infinite alternate;(kuch bhi Pehle aa skta hai yeh matter nahi krta bs pehla time duration rhega aur dusra delay)
+
+keyframes:
+           @keyframe slide{
+              0%{}
+              33%{}
+              60%{}
+              100%{}
+            }
+Note- we can define n no. of frames
+
+** LIBRARY- -- ANIMATE.CSS
+
+
+=================================================================================================================================================================================
+                                                                                        JS
+=================================================================================================================================================================================
+prime number = divisible by himself or 1;
+JSON.parse => string to object
+JSON.stringify() => onject to string
+
+ES6 (ECMA  Script 6)
+
+** Provide behaviour to page.
+
+JavaScript is a high-level, interpreted, dynamic, scripting language. Here are some key points:
+
+High-level: It abstracts away most of the complex details of the computer.
+Interpreted: It's executed line-by-line by the browser, rather than being precompiled.
+Dynamic: Types are determined at runtime, and it supports dynamic typing.
+Scripting: It is primarily used to automate and control web page behaviors.
+
+
+** dialogue boxes: alert(""), confirm(""), prompt("")
+
+
+comment - // or /* */
+
+variable - let,var,const
+   var- before es6
+   let,const - after es6
+
+Data types - 
+            Primitive data types - num, boolean, undefined, Null, Symbol, Bright
+            Primitive data types - Object
+
+Wrapper object: Everything is object in js to check this-
+           let num =10;
+           console.log(num.__proto__);
+
+Methods in string: charAt(3), concat(str.concat(str2)), length, str.indexOf(x), str.toLowerCase(), str.toUpperCase()
+
+Operators: assignment, arithmetic operators, augmented operator( += , -= , *= , /=) (i += 3);, comparision(==, ===, != ,<=, >=),
+           logical(&&, ||, !)
+
+
+**Type coercion:- automatically converting type
+                let  num = '5' + 5 => 55 (string)
+                let  num = '10' - 5 => 5 (number)
+                let  num = '10' * 5 => 50 (number)
+      Note- Only + concinate the string.
+
+
+**Type conversion:- converting data type manually
+                 1. string - 
+                            String[100];
+                            num.toString();
+
+                 2. number -
+                            Number[];
+                            str.toNumber()
+                            + = console.log(+str);
+                            parseInt("12344");
+                            parseFloat("12344");
+
+                  3. boolean - 
+                             Boolean("") => false
+                             Boolean("sagar") => true (if empty then false if not then true);
+
+
+**Switch statement: 
+                    let light = "red"
+                    switch(light){
+                    case "red" : console.log("Not ok");
+                    break;
+                    default: console.log("ok");
+                    }
+
+
+** do While : 
+             let i = 0;
+             do {
+                 console.log(i);
+                 i++;
+             } while (i<10);
+
+**Function => 
+
+** default parameters : function sum(param1=0){//code}
+
+** return value : Instead of printing we can return value from function
+
+
+**Arrays:- in js arrays are hetrogeneous(means they can store any type of value);
+
+** ways to create - let num = [1,2,3,4]
+                    const names = new Array("Sagar", "Kaushik");
+
+**Methods = .length, 
+            *push, unshift => add elements in end & start
+            *pop,shift => elements in end & start
+            *indexOf(), includes() => return the index on. of that searched element
+            
+            *slice => arr.slice(3) => it will return 3 elements but it will not modify orignal array.
+                     arr.slice(-3) => it will return last 3 elements
+            
+            *splice => We can modify orignal array by adding and removing items
+                      arr.splice(index-no, no-of-element-to-delete, items-to-add);
+                      names.splice(2, 0, "sagar","ok") => it will add sagar,ok at 2 and delete 0  elemnts;
+
+           *concat => new arr = arr1.concat(arr2,arr3) => it will not modify orignal. it will create a copy.
+         
+
+**Loops in Array : for loop
+                 for In => for (let i in num) => in this i is string we have to convert in number for calculations;
+                 for of => for (let number of num);
+                           console.log(number); it will return direct element
+      Note => agar iterator(i) ki jaturat nahi hai toh use "for of" otherwise use "for, for in";
+
+
+**Rest & spread operators:- (...)
+
+  ** Rest operator : if we want to pass more then one value as an argument. rest operator allows a function to accept an indefinite number of arguments as an array
+
+  Ex - let julyBatch = ["Alice", "Bob", "Charlie"];
+       function addUser(batch, ...names){
+        for(i of names){
+          julyBatch.push(name);
+         }
+         console.log(julyBatch)
+       }
+       addUser(julyBatch,"Eve", "Frank", "Grace") => now we are able to pass more then one value
+
+  ** Spread operator : it spread all the elements of an array(it makes a copy of elements and we can store it in another array);
+  
+      let julyBatch = ["Alice", "Bob", "Charlie"];
+      let newArr = [...julyBatch] 
+      Note=> it will make a shallow copy and if we add anything in new array they are only limited to new it will not reflect in orignal array.
+
+      **Concatinate using spread:- 
+      const newArr = [...arr1 , ...arr2];
+
+
+** Traversing on string :- 
+                           1). for(let i in str){
+                            console.log(str.charAt(i))
+                            };
+                            2).for(let i of str){
+                            console.log(i)
+                            };
+
+**Methods in string :- they will not affect orignal string
+                       1. includes() => str.includes("is") (it will return true orfalse)
+                       2. replace() => str.replace("is", "was") (replace first is to was in string)
+                       3. replaceAll() =>str.replace("is", "was") (it will replace all the words ot letters)
+                       4. trim() =>str.trim() (it will remove starting and ending space like ( name is ) space before and after name-is)
+                       5. substring() => str.substring(3,10) (3 se 9 element ke beech ki nayi string de dega because 10 is not included)
+                       6. slice() => str.slice(-6) it will return last 6 characters (same as substring but agar hm value -ve mein dete hain toh last se value return krega)
+                       7. split() => it converts str into array
+                       Ex - let arr = str.split(",") (isme btana pdega ki nya element kb bnega jaise isme , diya hai toh hr ek comma ke baad nya element bn jayega hm space bhi de skte hain.)
+
+
+-----------------------------------------------------------------------------------------------------------
+                                 How Javascript Works
+-----------------------------------------------------------------------------------------------------------
+
+1). Execution Context: execution context consists of the environment where your code runs
+           **it has two staps -> creation phase , execution phase :
+                     1. Memory allocation =>here all variable will store with undefined and functions with fxn body;
+                     2. code Execution => in this all variable will assign to their values and function will create own local execution context in which they have their own variables and functions.
+
+**Thread of Execution => we can call code execution thread of ex. because here execution will happen one by one in single thread
+
+2). Hoisting : We can use variable before declaring it. it will not throw ant error.
+             
+              Ex - console.log(a)
+                  var a = 10;
+
+3). Call Stack : The call stack is like a list that keeps track of which functions/operations are running in your code. When a function is done, it gets removed from the list so the next function can run.
+
+
+4). Scope : The invoirnment in which we can use some variable or not
+            ** Global scope : All variable declared on top or outside any function can be accessible anywhere.(let,const,var)
+            ** Functional scope(Local) : All variable declared inside function can't be accessible outside. (let,const,var)
+            ** Block scope : inside curly braces (let,const )
+
+5). Lexical environment: when local function have access of outer fxn variables; If we have not declared any variable inside function then it will look outside and take that.
+
+** undefined :- if variable declared with dataType but not given any value (let a)
+** not defined :- if variable declared without data type (a =10)
+
+
+6). Temporary dead zone: All types of variable are hoisted(var,let,const) but let,const can't be accissible unless we define them somewhere;
+
+7). StrictMode : - we can use it to follow programming rules and avoid mistakes.
+                   'use Strict';
+                   a=10  // it will not allow to declare like this
+                   console.log(a);
+
+** diff b/w let & var 
+                     var a = 1;
+                     var a = 2; // this is allowed to declare again which is problem we can't do it with let
+
+
+8). Closure :- a closure is when a child function "remembers" its parent function's variables, functions, etc. even after the parent function has finished running. This allows the child function to access and manipulate those variables whenever it is called
+
+Ex - function outerFunction() {
+       let outerVariable = 'I am from the outer function';
+
+          function innerFunction() {
+              console.log(outerVariable); // innerFunction can access outerVariable
+             }
+
+           return innerFunction;
+         }
+
+       let closureExample = outerFunction();
+        closureExample(); // Output: "I am from the outer function"
+
+9). JavaScript runtime environment :- we can run js code anywhere on browser,in mobile. we don't need any ide installation for that .
+                       JavaScript runtime environment is a place where JavaScript code is executed.
+                       we can run it on frontend like browser and in backend like node js.
+              **keypoints:
+                      1. Engine:- every browser have their own engine like googlr has v8, firefox has Spider monkey
+                      js Engine consist of:- 
+                                            1. callStack 
+                                            2. Memory heap => where all fxn,array,objects stored
+
+
+------------------------------------------------------------------------------------------------------
+                                              Functions
+------------------------------------------------------------------------------------------------------
+1). function declaration : declare function by fxn keyword  => function sum(a,b){return a+b;};
+
+2). function Expression: Storing function in variable => const sum = function (a,b){return a+b;};
+     **Note: we can't hoist function expression because in memory allocation phase variable is assigned to undefined not fxn.
+
+3). Anonymous function : the function which don't have any name.
+
+4). Arrow function : var sum = (a,b)=>{return a+b}; OR (a,b) => a+b; 
+     Note: Can't hoist
+
+5). IIFE (Immediate invoke function expression) : if we want to run function as soon as they created without calling.
+    Ex - (function(a,b){return a+b})(4,5);
+
+     Note : cover function inside: () and put () immediate after function
+          : we use this before let & const
+          : if we make any var inside this they all will be private unless we are not reutning something. if we are returning the var inside iife will be public.
+
+
+6). Pure Functions: if return value completely dependent on input then pure otherwise not pure.
+
+      Ex - **Pure: function(a,b){return a+b}; (No external fector)
+           **ImPure: let c=10;
+                        function(a,b){return a+b+C}; (Taking c from outside not pure);
+
+   Note: Using console log also makes finction impure because console is provided by web api's and it's external.
+
+7). Callback function: when use function as an parameter/argument
+                      It is mostly used in Async js.
+
+                      Ex -  function sum(a,b) {
+                              console.log(a+b);
+                          }
+                      function result(fxn ,num1,num2){
+                          fxn(num1,num2);
+                      }
+                      
+                      result(sum,10,2);
+
+8). Return function:  function greet(message){
+                        return function (wishes){
+                          console.log(`${wishes}, ${message}`)
+                              }
+                          }
+                          const greeting = greet("Hello World");
+                          greeting("hello")
+                              OR
+                         greet("Hello World")("hello") => this way we can call fxn inside fxn
+
+9). Higher order function: function which accept fxn as an argument or return a function is called higher order fxn.
+
+    Ex: const inputs = [1,2,3,4,5,6,7,8,9];
+        function result(arr,fxn){
+            for(let i of arr){
+                console.log(fxn(i));
+            }
+        }
+        
+        function square(num){
+            return num*num;
+        }
+        
+        result(inputs,square);
+                                           
+Note- ese hm pura calculator bna skte hain km line ke code mein
+
+10). First-Class Function: The capability of treating functions as values that can be assigned to variables, passed as arguments, and returned from other functions.
+
+11). Currying: it allows us to transforms a function with multiple arguments into a sequence of functions.
+   
+   Ex - function add(a,b,c){return a+b+c} // Non curry
+        function add(a){
+            return function(b){
+                return function(c){
+                    return a+b+c;
+                }
+            }
+        }
+      console.log(add(1)(1)(1))
+
+  **Benifit of currying: *Reusability
+                         *Currying makes it easier to compose functions and create higher-order functions.
+
+-------------------------------------------------------------------------------------------------------------
+                                               Inbuild Functions
+-------------------------------------------------------------------------------------------------------------
+
+1). Map: we can iteralte an array and manuplate.It does not modify orignal array.
+         it has three arguments: the current element, the index of the current element, and the array itself.
+         
+    const inputs = [1,2,3,4,5,6,7,8,9];
+    inputs.map((item)=>{return item});
+
+2). Reduce: in simple words we can say it is used to reduce array in single number.
+             Ex- if we want to get sum of an array in this case we use reduce.
+
+             It has three arguments: accumelator, currentvalue, currentIndex, arr; (currentIndex, arr are optional)
+
+             **accumelator: it is a var which holds the result(or if we pass the initial value it will hold that);
+
+          => reduce(fxn, initial state) (initial state is optional)
+           **Ex: let a = [1,2,3,4,5,6];
+          
+               let sum = a.reduce((num,val)=>{
+                   return num += val;
+               },0)
+
+               console.log(sum);
+    Note: if we are giving initial value then index will start from 0 otherwise it will start from 1.
+
+3). filter: it filter and give new array on certain conditions.
+      **Ex: let num = [1,2,3,4,5,-1,-3,-5,-9];
+              let res = num.filter((value)=> value<0);
+              console.log(res);
+
+4). find: find number return searched number if present otherwise undefined if not
+          it will return only first instence.
+        
+         **Ex: let num = [1,2,3,4,5,-1,-3,-5,-9];
+         let res = num.find((num)=> num == 4);
+           console.log(res);
+
+5). findIndex: return the index of searched number and return -1 if not present
+              it will return only first instence.
+                
+            **Ex: let num = [1,2,3,4,5,-1,-3,-5,-9];
+             let res = num.findIndex((num)=> num == 4);
+               console.log(res);
+
+6). More=> every, fill, findLast , findLastIndex , forEach
+
+---------------------------------------------------------------------------
+                                   THIS
+---------------------------------------------------------------------------
+** This keyword: Pointer to the object
+
+this in global: console.log(this) => it will point to the window object
+inside function: if function is not bounded by any object it will return undefined.
+               : if function inside a object then it will refer to that object.
+inside object: it will refer toi that object.
+
+inside Arrow fxn : Arrow will take this of parent scope. and point wherethe parent is pointiing.
+            ex: let arrow = ()=>{console.log(this)}
+                arrow(); => it will return window object.
+
+---------------------------------------------------------------------------------------------------
+                                     Object oriented Programming
+---------------------------------------------------------------------------------------------------
+
+1). Object Literals: Syntax for creating an object in js. In this we use key,value pair.
+
+         **Properties: everything inside object is called properties of an object.
+                   **Ex: const person = {
+                           name: 'John Doe',
+                           greet: function() {
+                             console.log('Hello, my name is ' + this.name);
+                           }
+                         };
+2). Method: if we have fxn inside object. then that fxn is called method of that object.
+
+3). Bracket notation: Syntax: object["property"]
+                         When the property name is dynamic (e.g., stored in a variable), contains special characters or spaces, or is not a valid identifier.
+
+                Ex: const person = {name: 'Alice',};
+                    
+                    // Accessing properties using bracket notation
+                    console.log(person["name"]);           // Output: Alice
+                    
+                    // Using a variable to access a property
+                    const prop = "name";
+                    console.log(person[prop]);    
+
+4).this in object :  this point to the object.
+                     let details = { name: "Alice", 
+                     company: "ABC Inc.", 
+                      function : function(){console.log(this.company)} 
+                             }
+                     details.function();
+
+5).Factory function: we can create multiple object of similar key names with one function.
+                    it is similar to constructor function;
+                    
+                  Ex: function movie(name,year){
+                        const obj = {
+                         name : name,
+                         year: year,
+                         details: function(){
+                          console.log(`${this.name} ${this.year}`)
+                         }
+                        }
+                        return obj;
+                      }
+                      // Calling
+                      let movie1 = movie("tere naam", 2012)
+                      console.log(movie1);
+                      movie1.details();
+                      
+6). Constructor function: it is a function which called automatically whenever a new object is created.
+                        we can create new obj with this & new keywords;
+                      **EX: function Movie(name,year){
+                                  this.name = name;
+                                  this.year = year;
+                              }
+                              let movie1 = new Movie("tere naam",2012);
+                              console.log(movie1)
+
+
+7). prortotype: In JavaScript, a prototype is an object that other objects can inherit properties and methods from.
+             js is a prototype language. All the objects in js have a prototype.
+              ex: let movie1 = new Movie("tere naam",2012);
+                              console.log(movie1.__proto__); // it will give us proto of constructor
+                              console.log(movie1.__proto__.__proto__); // it will give us proto of main obj from which all object gets created
+
+8). prototype Chain => we can modify the prototype of constructor and add new fields and they will not be visible in constructor we can inherit them from prototype.
+    we use "prototype" property for this.
+
+    **EX:function Movie(name){ this.name = name }
+             Movie.prototype.year = 2012; //it will not modify constructor it can inherit from Movie object.
+
+             console.log(Movie.year)
+
+9). Arrays prototype => Array also point to an object prototype named array.and that prototype point to the main class. So we can say everything is object in js.
+                    ex: let arr = [4, 2, 34, 4, 1, 12, 1, 4];
+
+                        console.log(arr.__proto__);
+        
+    Note: that prototype contains all the methods which we use in arrays like(map,push,pop etc).
+
+
+10). Object.create  => we can copy the prototype of an object into another it will not copy the method or values.
+
+  ex: const person = {name: 'Alice',};
+
+     const person2 = Object.create(person); //name will not transfer in person2 but we can access by inherit it.
+
+     person2.name;  // Accessing by inheriting from prototype not from array.
+
+
+11). call/apply/bind methods=> 
+                              1). Call => call is used to bind method(fxn) of one object to another
+
+                              ex: let obj1 = {fxn:function(name){console.log(`my name is ${name}`)}}
+                                  let obj2 = (age:20,)
+
+                                  obj1.fxn.call(obj2,"Sagar") //first parameter is this means the another obj and second parameter is the parameter for the method.
+
+                            2). apply => apply is same as call but here we pass array in method arguments,
+
+                            Ex: obj1.fxn.call(obj2,["Sagar",]) // here we are passing arguments inside array
+
+                            3). Bind => it is also same but it binds the method of obj in another and stored it in var so it can be resuable;
+                            Ex: let new = obj1.fxn.bind(obj2);
+                             new("Sagar");
+                             new("kaushik")  // now we can call it again & again by var name
+
+
+12). object destructuring: Way to unpack more then one value from object.
+                        //binding pttern
+                          Ex: let obj ={a:1 ,b:2 ,c:[1,2,3,4],};
+                               //Making key names as variables so we don't have to write obj.a etc everytime.
+                              const{a,c} = obj; // we have to pass the same name
+                              console.log(a);
+
+                        // Renaming keys
+                               const{a:num} = obj; // a is renamed as num
+                                 console.log(num);
+
+                        // Assignment pattern
+                                let num;
+                                ({a:num} = obj);
+
+
+13). Array destructuring: 
+                          //binding pattern
+                              let fruits =["apple","mango","banana","kiwi","lichi"]
+
+                              let [a,b] = fruits; // first two will be assign to a,b
+
+                        //Skip a value
+                               let [a,,,b] = fruits; // it will skip 2 values after a because of empty
+
+                        //Assign more then one value to var
+                               let [a,b,...c] = fruits;//first two will come in a,b and rest will store in c.
+                               let [a,b,...[c,d]] = fruits;
+
+
+-----------------------------------------------------------------------------------------
+                                      ES6 Classes
+-----------------------------------------------------------------------------------------
+                          
+1). Class: Blueprint for creating object. Classes are not hoisted.
+
+          **Structure: class vehicle{
+                            //Properties (just telling first about used keys for good practice it's optional)
+                            name;
+                            color;
+                            //Constructor
+                            Constructor(name,color){
+                            this.name = name;
+                            this.color= color;
+                            }
+                            //methods (this will nit visible we have to inherit it from prototype)
+                            details(){
+                            console.log(`${this.name} ${this.color}`);
+                            }
+                          }
+
+                let veh1 = new vehicle("tata","black");
+
+
+** hasOwnProrety("Name") // to check if object contain that key or not
+
+2). Encapluation : hiding the property of an class as private so no one can assess them outside the class.
+
+                 Ex: class vehicle{
+                     //Private declaration
+                     #number
+
+                     //constructor
+                     Constructor(name,number){
+                      this.name = name;
+                      this.#number = number;
+                     }
+                 }
+                 vehicle.#number = 2233 // this modification will not allowed because it is outside class
+                 console.log(vehicle.number) //this is also not allowed
+
+        **Private method:
+               Ex: class vehicle{
+                            //Properties 
+                            number;
+                            //Constructor
+                            Constructor(number){
+                            this.number = number;
+                            }
+                            //Private methods 
+                            #details(number){
+                            return;
+                            }
+
+                            //another normal method
+                            output(){
+                            console.log(`Private number is: ${this.#details(this.number)}`)
+                            }
+                          }
+                          let veh1 = new vehicle(22334);
+                          console.log(veh1.#details) // Not accessible due to private
+
+3). Class Inheritence: Ability of class to inherit properties and methods of another Class.
+
+           METHOD: extends(to extend class and it's properties/methods),super(to get properties of constructor)
+
+    NOTE: Agar kisi class se koi prpoerties inherit kr rahe hain toh use parent class kahenge aur jisme kr rahe hain use child class.
+
+          Ex:class Vehicle{
+                            name;
+                            color;
+                            constructor(name,color){
+                            this.name = name;
+                            this.color= color;
+                            }
+                            details(){
+                            console.log(`${this.name} ${this.color}`);
+                            }
+                          }
+                          
+                         class Car extends Vehicle{    //Inhereting from Vehicle
+                             wheels;
+                             constructor(name,wheels){
+                                 super(name , "red")    //Using super for copying constructor
+                                 this.wheels = wheels;
+                             }
+                         }
+
+                         const car1 = new Car("BMW", 4);
+                         console.log(car1.details())    //Accessing method from prototype
+
+
+---------------------------------------------------------------------------------------
+                             DOM Manuplation
+---------------------------------------------------------------------------------------
+
+1)API(Application Programming interface): 
+
+                            1). Web Api : it has two types:
+                                          **Browser Api:  Build in api in browser
+                                          **Third part Api: third party like(google maps,razorpay,music app etc )
+
+           ** Browser Api: All browser Api presents inside window Object. we can access from there.
+
+                 Name: Dom(document Object Model) , video , Audio
+
+2). DOM : Representation of HTML inside js as nodes and objects.
+
+        selectors: document.body.childrens , document.getElementById , getElementByClassName , 
+                  querySelector("h1") => it will select only first one
+                  querySelectorAll('h1') => will select all h1
+                  getElementByTagName("h2");
+
+3).Change Style: 
+                document.getElementById('sk').style.color ="red";
+                document.getElementById('sk').style.backgroundColor ="red"
+
+    ** set Attribute: setting attribute dynamically
+                    Ex: const imageElement = document.getElementById('myImage');
+                         imageElement.setAttribute('src', 'new-image.jpg');
+
+4). createElement(): use to create new elements dynamically
+
+     Note: we use createElement & appendChild
+     
+                   Ex: let nw = document.getElementById("my-id");
+
+                        let btn = document.createElement("button");
+                        btn.textContent = "click here";
+                        btn.className = "button";
+
+                        nw.appendChild(btn)
+
+ ** Append vs appendChild: appendChild is  used to append a single element as a child to another element.
+                           append is used to  to append multiple elements or text to another element
+
+                           Ex: var parentElement = document.getElementById("parent");
+                               var childElement = document.createElement("div");
+                               var textNode = document.createTextNode("Hello, World!");
+                                     
+                                     // Appending multiple elements to the parent element
+                                parentElement.append(childElement, textNode);
+
+ ** InnerHtml : it return Whole Element
+                var element = document.getElementById("myElement");
+                  var htmlContent = element.innerHTML;
+
+**textContent :  it return only text inside tags excluding tags
+                 var element = document.getElementById("myElement");
+                 var textContent = element.textContent;
+
+
+4). Removing Element : remove()
+                     Ex: document.getElementById("myElement").remove();
+
+
+5). Event listeners: 
+                   a) onclik() => this is inline event we can write it in html element or js file anywhere
+                       Ex: <h1 onclick(alert("hello"))>hello</h1>
+
+                                  OR in js
+                        let p =document.getElementById("myElement");
+                        function alrt(){
+                            alert('okii')
+                        }
+                        p.addEventListner("click", alrt)
+
+                            OR
+                        p.addEventListner("click", ()=>{ alert('okii')});
+
+6). inserting Elements: we can change positions of div up and dowm and also delete
+                       
+                       blogList.insertBefore(newBox,blogList.children[0]);  //to move up
+                       newBox.remove()                                      //to delete
+                       blogList.insertBefore(newBox,blogList.children[-1]); //to moving down
+
+7). More events: nouseover, mousedown, mouseup, keydown , keyup
+                 drag Events
+    **we can also see which key is pressed: 
+                                          document.addEventListener('keypress', (e)=>{
+                                                   console.log(e.key)
+                                                    })
+
+
+8). Event propogation: 
+                       ** Event Bubbeling: even if we apply click event on top div it will first apply in all iner div then outer and outer. This is called bubbeling.  this is default
+
+                                   Note : it will not go inside it will comme outside.
+
+                        ** Event Capturing: If we want to reverse the order i.e outer to inner then we have to pass capture event that is boolean value. by default it is false.
+
+        Ex: document.body.addEventListener("click",()=>{
+        console.log("clicked")
+        } true) //If we are passing true then the order will be reversed.
+
+    
+** Stop Propogation: if we want to stop this only that div shouldbe clicked no outer or inner div will affect for this we use stop propogation;
+
+        Ex:  Ex: document.body.addEventListener("click",(e)=>{
+        e.stopPropogation();
+        console.log("clicked")
+        })
+
+9). div.insertAdjecentHTML("beforeend",card) ;; card ke pehle div ko append krega
+-----------------------------------------------------------
+              Array Shuffle
+-----------------------------------------------------------
+
+** Two options:: Using array destructuring
+
+let arr = [1,2,3,4,5,6,7]
+[arr[3], arr[0]] = [arr[0], arr[3]];
+
+** All options:: using for loop on array destructuring
+      let aer = [1,2,3,4,5,6,7,8,9];
+      console.log(aer);
+      for(let i=aer.length-1 ; i>0 ; i--){
+          let j = Math.floor(Math.random()*i+1);
+          [aer[i],aer[j]] = [aer[j],aer[i]];
+      }
+      console.log(aer);
+
+-----------------------------------------------------
+                  Asynchronous Js
+-----------------------------------------------------
+
+Note: js is synchronous and single threaded language
+
+1). SetTimeOut = set time for time after fxn will be executed.
+
+               ex: setTimeOut(fxn,2000)
+
+2). setinterval = repeat fxn after howmany time.
+
+ ex: let time = setTimeOut(fxn,2000); // calls fxn after every 2 sec;
+
+       if(){
+       clearInterval(time)  // Stops the interval
+       }
+
+3). Callback = It is a function passed as an argument to another function, which is then executed after the completion of some asynchronous operation.It allow handling the result of an API request or file read and many more.
+
+           Ex:function fetchData(callback) {
+                   setTimeout(() => {
+                       callback('Data received');
+                   }, 1000);
+               }
+               
+               fetchData((data) => {
+                  console.log(data);
+               });
+
+
+
+4). XML HTTP Request: Now day's we don't use it. we use Fetch. But just for information.
+
+    let request = new VMLHttpRequest();
+
+    request.open("Get","url");
+    request.send();
+    request.addEventListener('load',()=>{
+    console.log(request.responseText)
+    })
+
+5). Control flow of request: 
+                              if(request.status === 404){ console.log('not found')};
+
+7). Callback hell: chain of callback functions which is called pyramid of doom or callback hell. because if one request fails it's  hard to track. that's why we use promises.
+
+
+8)Promise: it is an object.it is like a container which stores the future value.
+        Promise takes three function as parameter :pending,resolved,reject
+        we use: .then,.catch,.finally for(resolve,reject and for both)
+
+Ex: let ok = new Promise((fullfill,reject)=>{
+    setTimeout(()=>{
+        // fullfill("not Ok")
+        reject("not Ok")
+    },1000)
+     })
+     
+     ok.then(()=>{console.log("ok")})
+     .catch(()=>{console.log("No ok")})
+     .finally(()=>{console.log("Request completed")})
+
+9). Promose All: Takes two or more promise and combines the output in array.
+
+Ex:  const promise1 = new Promise((resolve) => setTimeout(() => resolve (1), 1000));
+     const promise2 = new Promise((resolve) => setTimeout(() => resolve(2), 500));
+    
+    Promise.all([promise1, promise2]) .then((results) => console.log(results));
+
+    Output: [1,2];
+
+10). Promise.race() => It returns the result of the promise that resolves or rejects first, whichever is faster.
+
+Ex:  const promise1 = new Promise((resolve) => setTimeout(() => resolve (1), 1000));
+     const promise2 = new Promise((resolve) => setTimeout(() => resolve(2), 500));
+
+      Promise.race([promise1, promise2]) .then((results) => console.log(results));
+
+      Output: 2;
+
+11). Fetch: Promise based API:
+        fetch(url).then((res)=>res.json).then((data)=>console.log(data)).catch((err)=>console.log(err));
+
+12).Custom error: We can create our own error by new Error and return them by throw function.
+
+       Ex: fetch(url)
+           .then((res)=>{
+             if(!res.ok){
+                throw new Error("Not ok")
+              }
+              return res;
+           }).
+
+    ** Here .catch also works for new Error.it will show in .catch
+
+13). async/await:   async: keyword before function to make function asynchronous.
+                    await: to perform operations on async function
+
+        Ex: async function output(){
+          let response = await fetch('url')
+          let data = await response.json();
+          console.log(data)
+        };
+
+14). try/catch: it is used to debug the code. in try block put code which we want to test and in catch it will catch the errors.
+
+     Ex: async function output() {
+    try {
+        let response = await fetch('https://dummyjson.com/users');
+        if (!response.ok) {
+            throw new Error("not found")
+        }
+        let data = await response.json();
+        console.log(data);
+        }
+        catch (err) {
+            console.log(err)
+        }
+       };
+      output()
+
+15). Event loop: event loop allows JavaScript to perform non-blocking operations by handling asynchronous events and callbacks.
+ Note: It will check if call stack is empty then it sends the tasks to call stack after their time . Here Promises are on priority they go first before other operations.
+
+
+-------------------------------------------------------------------------------------------------------
+                                         MODULES
+-------------------------------------------------------------------------------------------------------
+
+** Without module we can use two or more js files in html but we have to maintain all js files in sequence.if sequence changed we will not get desired output. to tackle this error in es6 modules are introduced.
+
+types: before es6 modules we were using iife(immediate invoke function expression)
+
+es6 modules: We need to specify that we are using modules:
+        Ex: <script type="module" src="index.js"/>
+
+        Types of export: 1). Named : can be infinite (import in {})
+                        2). Default : only one (import without {})
+
+        import Everything ::  import * as items from './items.js';
+        change Name :: import {obj as obj1} from './items.js'
+
+
+
+-----------------------------------------------------------------------------------------------------------------
+                                              JQuery
+-----------------------------------------------------------------------------------------------------------------
+
+It is a library which makes writing code in js a lot easier
+
+Step-1: download j-query file and import it in project. OR we can include CDN links
+Step-2: 

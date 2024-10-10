@@ -1,0 +1,271 @@
+&& return first false and last true value
+Ex: (data && data.map()) if data is empty then it's false then it will return first otherwise second
+
+|| return first true & last false
+
+Use case: if we want to display user's last name if available otherwise firstname then:
+         <p> name is: {lastName || firstName}</p>
+
+**** Flaticon website ****
+---------------------------------------------------------------------------------------
+what is react : A js library for building user interfaces.
+why react: component based, code reusability, SPA(Single page Application)
+Single page vs multiple page Applications: multiple page render whole new page while single page render needed component only.
+
+---------------Ways to create react app-----------------------
+1). Using CDN links
+2). Create react app
+
+##1). Using CDN Links: .include CDN Links inside html body.
+         .Js file: const Heading = React.cretaeElement("h1",{className="heading"}, "Hello world");
+                 ReactDOM.createRoot(document.getElementById("root")).render(Heading);
+
+
+-----------------------------
+Virtual Dom: we does not directly change in real dom we make changes in a copy of DOM which is called Virtual DOM.
+            and only final changes reflects in real DOM.
+            It compares both DOM and make changes .
+
+JSX(JavaScript XML): We can write HTML,CSS & Js logics inside jsx.
+
+Babel : It is a compiler which converts JSX into javascript understandable code.
+   Note: we can install it or we can use CDN links.
+
+include: <script src="index.js" type="text/babel"> // Now it will convert JSX code into JavaScript fron index.js file
+
+-----------------------------
+React Fragments: All elements must be wrapped inside one parent elements.
+                but if we don't want to add extra parent because root element is also there then we use React.Fragment
+  Use: <> OR <React.Fragment>
+Ex: <React.Fragment> // Rest Code </React.Fragment>
+
+
+React Components: 1). Functional Components
+                  2). Class Components
+
+1). Functional: 
+               function App(){
+                return(
+                    <>//Code</>
+                )
+               }
+React.createRoot(document.getElementById("Root)).render(<App />);  //Call it like Component
+
+**Benifit of using arrow function: do not need to return anything just use () 
+
+Ex: const App = ()=>( <>//Code</> )
+
+Note: it only works if we are returning one thing and JSX have one parent so it will work 
+
+--------------------------------------JSX (javascript XML/extension)-------------------------
+Don't need to write html,logic in different files.
+
+** Embedding js logic in JSX: use => {} to include js
+
+** JSX Expressions: const header = <h2>Welcome</h2>;
+
+** Render array & Objects : use () in map instead of {} because () tells browser it is JSX not js.
+                           We can't use for loop in react because it does not return anything.
+                           instead we can use map,filter etc functions
+
+** Unique keys: It's mandatory to give keys we can give index number as key.
+              : number.map(num,index)  //Use index as keys 
+
+** Render component based on condition: ternary operator (? : ) , And operator , OR operator 
+
+-----------------------------------------Events in jsx -------------------------------------------
+
+onClick , onBlur etc.
+
+function add(){};
+<button onClick={add}>Add</button>  //No need to call the fxn just pass reference
+
+Note: if we want to display the result on event we have to reRender the page.
+
+ex: function add(){
+    total += 1;
+    React.createRoot(document.getElementById("Root)).render(<App />);
+};
+
+And because react uses Virtual DOM only changed part will reRender not whole page.
+
+** Synthatic Events : These are the wrapper of events in DOM
+Eg: e.preventDefault
+
+---------------------------------------------Refs ----------------------------------------
+In React, `ref` is used to directly access and interact with a DOM element or a React component, without using state or props.
+ It's helpful when you need to focus an input, scroll to a specific element, or keep track of values that don't trigger re-renders.
+
+    const inputRef = React.createRef();
+     <input ref={inputRef.current.value} />  // Can take value from input
+     inputRef.current   // It will return current element
+
+Note: ref is a uncontrolled . it dosen't matter if app is reloaded or not for changes the ref value still changes.
+     It does not depend on component.
+
+------------------------------------------Webpack -------------------------------------------
+
+Drawback of CDN's : Need continuous network to connect.
+                  :can be multiple scripts so hard to handle first which to put first 
+
+Webpack :(Module Bundeler) It bundle all the files send sends to the browser.
+
+** Create app: 
+              create-react-app appName       //Use this if create-react-app installed globaly
+              npx create-react-app appName  //Use this if create-react-app not installed globaly
+
+------------------------------- React Components -----------------------------------------
+
+Class Based Components : 
+                     Ex: import React from "react";
+                         
+                         export default class App extends React.component{
+                            render(){
+                                return <h1>Class Component</h1>
+                            }
+                         }
+    Note: We have to extend the class from React.component
+          And to return we have to render first and then return 
+
+   ------------------------------ State in Class -----------------------------
+    export default class App extends React.component{
+        constructor(){
+            super();
+            this.state = {
+                name:sagar,
+                age:23,
+                email:sagar302001
+            }
+        }
+         render(){
+            return <h1>{this.state.name}</h1>
+                    }
+                      }
+
+-------------------------- Bind this in class --------------------
+In order to make use of method inside Event handeling we have to bind it with div.
+Otherwise we will be not able to use method.
+
+Ex: <button onClick={this.handleClick.bind(this)} > Add </button>
+
+                    OR
+    Create method using arrow fxn so no need of binding can use directly
+
+
+** Set State: --------------------------
+ It used only in class component. if we want to update state use setState() .
+ it updates the state and reRender the component.
+
+ Ex: Method-1: Use when previous state not required
+              this.setState({
+              age: this.state.age + 1;
+           });
+      Method-2: use when previous state required
+      this.setState((prevState)=>{
+        age: prevState.age + 1;
+      })
+
+Note: setState() is async in nature and if we want to reterive changed value we have to use callback:
+    this.setState((prevState)=>{
+        age: prevState.age + 1;
+      },()=>{console.log(this.state.age)}) //It will console after async completed
+
+Batching: if we call or define setState multiple time React will batch them and consider as 1 if all are performing same task
+       But if we are method-2 All calls will be considerd because we are taking previous State
+
+
+** Toggle: Make button to toggle 
+          handleDark = () => {
+    if(this.state.theme == "light"){
+      this.setState({
+        theme: "dark"
+      }) 
+    }else{
+      this.setState({
+        theme: "light"
+      })
+    }
+    
+  } 
+  <div className={this.state.theme === "light" ? "div light" : "div dark"}>
+
+---------------------------------------- PROPS -------------------------------------------
+
+Props are like argumet in functions .They pass data only from parent to child.
+We can't modify props inside child component.
+
+Inside class component: -----------------------------
+
+    Parent: import Card from "child"
+           <Card name="sagar" age={23}/>                        //Passing Props as HTML argumet
+
+    Child: render(){
+        return(
+            <h1>Name is: {this.props.name}</h1>        //Accessing prop with same name 
+        )
+    } 
+
+Functional component: --------------------------------
+  
+const MyComponent = (props) => {                      //pass props as an argumet
+  return <div>{props.name}</div>;                     //Access prop in Functional component
+};
+
+Note: Passing props is same for both class & function but Accessing is different.
+
+----------------------------Default Props -------------------------
+
+if we forgot to pass any prop value then we can assign default value.
+
+Inside Parent: childCompName.dafaultProps= {
+    name:"Sagar", age: 23
+}
+
+
+------------------------------- Styles in React -------------------------------------------------------
+
+1). Inline Styles: (We have to pass style as an object)
+   <div style={{width:"100%", height:50, backgroundColor:"red"}}></div>
+
+2). CSS Scopes:  create a saperate style object and use it:
+         const styles={
+            nav:{
+                width:"100%"
+                display:"flex"
+            },
+            pehra:{
+                fontSize: "1.2rem",
+            }
+         }
+    
+    <div style={styles.nav}></div>         //Use Object to style 
+
+3). Common css file:
+             But it has some cons It is globally accessed so  if we are making large scale project.
+             it is difficult to maintain unique className 
+
+4). Styled components : css in js styling (It is a library)
+  Note: in this we don't have to write css in camel case we can write as normal css in js.
+       And this is local scope so no worry of duplicate class/selectors name.
+
+    : npm i styled-components
+
+    import styled from "styled-components";
+
+    const Nav = styled.div`                //Style a div using template literals 
+    background-color: blue;
+    display : flex
+    `
+  //Now div is styled so use Nav instead of div
+
+  <Nav> ---- </Nav>
+
+  ** Dynamic style in styled Components: we can pass props for dynamic styling
+   
+  Eg:  <Nav color="yellow"> ---- </Nav>   //Passing props
+       
+       const Nav = styled.div`
+       color:${(props)=>props.color}      //Accessing prop
+       &:hover{color: white}             // Can giver hovering property
+    `
+
