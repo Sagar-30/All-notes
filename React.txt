@@ -6,7 +6,7 @@ Ex: (data && data.map()) if data is empty then it's false then it will return fi
 Use case: if we want to display user's last name if available otherwise firstname then:
          <p> name is: {lastName || firstName}</p>
 
-**** Flaticon website ****
+**** Flaticon website **** //To use icons
 ---------------------------------------------------------------------------------------
 what is react : A js library for building user interfaces.
 why react: component based, code reusability, SPA(Single page Application)
@@ -268,4 +268,263 @@ Inside Parent: childCompName.dafaultProps= {
        color:${(props)=>props.color}      //Accessing prop
        &:hover{color: white}             // Can giver hovering property
     `
+
+5). Css Modules:  As Css file is global scoped so whole app id's,attribute should be unique.
+          But if we create an unique css file for each component. then this issue will resolved.
+  Note: if we create anoter CSS file this issue will persist We have to create CSS module.
+
+**Cretaion: create file with name compName.module.css
+           Ex: header.module.css
+    
+    use: css module export an default object so we have to import it by any name of our choice.
+
+    : import HeaderStyle from "./header.module.css"
+      
+      <div className={HeaderStyle.div}></div>    //use as an object.
+
+Note: As css module is an object so avoid using className like(main-div) instead use (mainDiv)
+      write css like normal file in module.css 
+
+
+
+----------------------------------------Component Lifecycle-------------------------------------------
+component Lifecycle: it is a series of stages through which component passes from beginning to end.
+
+Phases:
+       Mounting: When component is created and inserted into DOM.
+       Updating: When component is re-renderd as a result of changes done in props or state.
+       UnMounting: When component is removed from DOM.
+       Error Handeling: When there is an error during rendering.
+
+Side Effects:  side effects are actions that affect something outside the scope of the current function,
+               like data fetching, subscriptions, manual DOM manipulations, timers, etc.
+
+ **Mounting: -------------------------------------------
+           Lifecycle methods: constructor()  //Automatically called when component created 
+                              static getDerivedStateFromProps()  //Rarely used
+                              render()
+                              componentDidMount()
+
+      1).constructor: Avoid sideEffect
+      2).render() : only required fxn, Returns JSX, Avoid sideEffect It should be pure functions 
+      3). getDerivedStateFromProps : it sets the state as per receiving from props just before render.
+                                     here also avoid sideEffect.
+
+      4). componentDidMount: when component and all it's children are mounted on DOM then this fxn invokes.
+                            this is the place to perform any sideeffect like calling API, interacting with browser API etc.
+                            We can also set state in this.
+
+        Ex: componentDidMount(){
+             fetch(" https://jsonplaceholder.typicode.com/albums/1/photos")
+             .then((data)=> data.json())
+             .then((item)=> {
+               this.setState({photos:item, loading:false});
+             });
+           }
+
+** Updating: ---------------------------------------
+    Lifecycle methods: static getDerivedStateFromProps    //Rerely used
+                       shouldComponentUpdate()            //Rarely used  (it return boolean values)
+                       render()
+                       getSnapShotBeforeUpdate()          //Rarely used
+                       componentDidUpdate()  
+
+      componentDidUpdate(): it invokes only when the component is re-renderd.(Similar to component did mount).
+                        component did mount invokes only once but this invokes in each re-render.
+                        it takes three parameter prevProps, prevState , snap . if need use it else not
+      
+      componentDidUpdate(prevProps, prevState , snap){} //the parameter are optional not mendatory
+
+      shouldComponentUpdate(nextProps, nextState)  // We can stop rerendering by returning true or false on conditions.
+
+
+**UnMounting: ---------------------------------------
+    Lifecycle methods:
+                      componentWillUnmount(): it invokes just before component unmount from DOM.
+                                              No effects here also.
+                                              If we subscribe to any service in component did mount this is the place to unsubscribe. and many more 
+
+
+
+** Error Handeling Methods: --------------------------
+                           :static getDerivedStateFromError();
+                            componentDidCatch();
+  
+  Note: if something went wrong  with app we can give fallback UI to users like amazon something went wrong. using getDerivedStateFromError
+
+  Error Boundary: it hepls us to catch the error log the error ang give fallback UI.
+
+  import React, { Component } from "react";
+
+class ErrorBoundary extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error, info) {
+    console.log(error, info);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return <h1>Something went wrong.</h1>;
+    }
+
+    return this.props.children;
+  }
+}
+
+export default ErrorBoundary;
+
+Use inside any component: 
+<ErrorBoundary>
+  <MyComponent />
+</ErrorBoundary>
+
+
+
+-----------------------------------------------HOOKS-------------------------------------------------------
+Class Based Component limitations: hard to reuse the stateful logic b/w components.
+                                  complex components difficult to understand.
+                                  Classes can be confusing at times
+
+What are hooks: hooks arethe fxn that let us use react state and Lifecycle methods inside Functional components.
+                hooks only used inside Functional components.
+
+1). useState(): -----------------------------------------------------------------------
+               import React,{useState} from "react";
+              const[name,setName] = useState(initialstate);
+
+2). useEffect(): helps us to perform any sideEffect like(calling API, interacting with browser API etc) in fxn component.
+     
+                useEffect(setup,dependencies?) //dependencies are optional
+Note: we can use componentDidMount,componentDidUpdate etc hook inside it, 
+
+Eg: useEffect(()=>{...code},[])    //Empty bracket acts like componentDidMount and update once only time of loading.
+    useEffect(()=>{...code},[name]) //it works like componentDidMount,componentDidUpdate because 
+                                            it update on start and every time dependencies changes.
+    
+    cleanup inside useEffect (return): The returned function (cleanup function) will run before the next effect runs or when the component unmounts, 
+                               cleaning up side effects like event listeners or subscriptions.
+
+      Ex: useEffect(() => {
+         const intervalId = setInterval(() => {
+           setCount((prevCount) => prevCount + 1);
+         }, 1000);
+     
+         // Cleanup function to clear the interval when the component unmounts
+         return () => {
+           clearInterval(intervalId);
+         };
+       }, []); 
+
+    Note: It acts as component will unmount.
+
+    ---------------------------------------------------------Rest Operator in useState----------------------
+
+    const [blogs,setBlogs] = useState([]);
+
+    setBlogs([{title,name},...blogs])
+
+    ** Pass object in useState: const [formData,setFormData] = useState({name:"",email:"",mobile:"",age:""});
+        set value: setFormData({name:e.target.value, email:formData.email, mobile:formData.mobile, age:formData.age})
+
+        // We have to mantion every key to get correct output.
+
+
+3)useRef(): ------------------------------------------------------------------------------
+            it is used to refer to any DOM element.
+
+            import  {useRef} from "react"
+
+            const titleRef = useRef(null)  //passing initial value 
+
+            <input className={title} ref={titleRef}>   //Assigning ref
+            
+            titleRef.current.focus() //Apply on any btn click or anything 
+
+4)useReducer(): --------------------------------------------------------------
+              :Alternative of useState in some case 
+              : If we have a state and it updating in many events like clicking btn,adding something,removing something etc.
+                   in this case we can use reducer to put all updating logic at a place outside component to reduce code 
+
+   Ex: const[state,dispatch] = useReducer(reducer,initialstate,init?)  //init is optional 
+
+   Note: it takes dispatch fxn instead of setState.
+
+Ex: import { useReducer } from 'react';
+
+const initialState = 0;
+
+function reducer(state, action) {
+  switch (action.type) {
+    case 'increment': 
+      return state + 1;
+    case 'decrement':
+      return state - 1;
+    default:
+      return state;
+  }
+}
+
+function Counter() {
+  const [count, dispatch] = useReducer(reducer, initialState);
+
+  return (
+    <div>
+      <p>Count: {count}</p>
+      <button onClick={() => dispatch({ type: 'increment' })}>+</button>
+      <button onClick={() => dispatch({ type: 'decrement' })}>-</button>
+    </div>
+  );
+}
+
+export default Counter;
+
+
+--------------------------------------------CUSTOM Hooks-----------------------------------------------------
+We can design and create our own hooks.
+
+using localStorage : 
+                  const[email, setEmail] = useState();
+                   useEffect(()=>{
+                    localStorage.setItem("email",email);          //Setting item in localStorage
+                   },[email]);
+
+                    useEffect(()=>{
+                    let email = localStorage.getItem("email");          //Getting item from localStorage
+                    
+                    setEmail(email);
+                   },[])
+
+Note: if we have multiple component which uses same code so instead of adding same code in all component create custom hook.
+
+Note: name should always start with use followed by capital letter. 
+
+step-1: create new file: useLocalStorage.js
+step-2: create hook:
+           import {useState,useEffect} from "react";
+
+           export default function useLocalStorage(){
+           const[email, setEmail] = useState();
+                   useEffect(()=>{
+                    localStorage.setItem("email",email);          //Setting item in localStorage
+                   },[email]);
+
+                    useEffect(()=>{
+                    let email = localStorage.getItem("email");          //Getting item from localStorage
+                    
+                    setEmail(email);
+                   },[]);
+
+              return {email,setEmail}                      //We have to return something to make hook.
+           }
+step-3: use in any component
+       import useLocalStorage from "./useLocalStorage.js";
+       const{email,setEmail} = useLocalStorage()                //Destructure
 
