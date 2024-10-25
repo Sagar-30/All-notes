@@ -593,3 +593,282 @@ onSnapshot(collection(db, "expenses"), (snapshot) => {
         id: doc.id,
          ...doc.data(),
       }));
+
+
+
+
+--------------------------------------------- Context API -------------------------------------------------------
+
+It become very complex of prop drilling and lifting state in large scale project.
+context API keeps the state outside of component tree and no need to pass state to every component.
+we can give context to parent component and all the child component can use it.
+
+Steps to use context: 1) Create the context
+                      2) Provide context to parent component
+                      3) consume(getting values from the context)
+
+1). Create new file: context.js
+    import { createContext } from "react";
+    export const colorContext = createContext();
+
+2) Provide : inside parent=>
+            import colorContext from "./context.js"
+             const [state, setState] = useState();
+            <>
+            <h1>Parent Component</h1>
+
+            <colorContext.Provider value={state}>      //Providing context to child 
+            <childCompName />
+            </colorContext.Provider>
+
+            </>
+
+  Note: we can also pass setState to use it anyWhere:
+        <colorContext.Provider value={{state, setState}}>         //Now we can use setState anyWhere.  
+
+3). Consume : there are two ways:
+                      1) use hook : useContext()
+                      2) use <Consumer> <Consumer />  provided by Provider.
+
+        import {useContext} from "react";
+        import colorContext from "./context.js"
+
+        const colorValue = useContext(colorContext);     //get value by passing context name
+
+## Custom Provider: -----------------------------------------
+    When we have many components and many context so it's difficult to manage all of them 
+    so we use custom provider to compact our all contexts.
+
+    **custom provider is a component which acts as a provider and use default provider.
+
+Note: instead of making multiple context and wrap child in all of them we can create saperate component for that.
+
+**Saperate App provider: 
+ 
+          import { createContext, useState } from "react";
+          
+          export const themeContext = createContext();
+          export const languageContext = createContext();
+          
+          export default function AppProvider({ children }) {    // We can access the children because we are passing it as a prop to AppProvider.
+              console.log(children)
+              const [theme, setTheme] = useState("light");
+              const [language, setLanguage] = useState("English");
+              return (
+                  <themeContext.Provider value={{theme, setTheme}}>
+                      <languageContext.Provider value={{language, setLanguage}}>
+                          {children}
+                      </languageContext.Provider>
+                  </themeContext.Provider>
+              )
+          }
+
+**Use it inside Parent:
+       <AppProvider>
+        <ChildComponent />
+      </AppProvider>
+
+Note: we can also pass the state & variables in that spaerate file for each provider.
+
+Access the value inside child: 
+                  import {useContext} from "react"
+                  import {themeContext} from "./AppProvider.js"
+
+                  const {theme} = useContext(themeContext);
+
+
+## Custom Hook: ---------------------------------------------
+    Instead of getting values inside child and write above three lines everyWhere .
+    we can create a custom hook inside AppProvider.js which will extract the value and just pass the value
+    We can also put the logic/fxn here which is used to manuplate the state. and then just export them
+
+    ex: inside AppProvider.js :
+        
+        // All code
+        export function useValue(){
+            const {theme} = useContext(themeContext);
+
+            export theme;
+         }
+        //other code
+
+   inside child component: instead of importing useContext,themeContext and extract value. we can simply do:
+
+   import {useValue} from "./AppProvider"
+
+   const value = useValue();
+
+
+
+--------------------------------------------------- Routing --------------------------------------------------
+Types of Routing: server side routing: for multi page applications 
+                  client side routing: for single page applications
+
+Library : React-router-DOM ----------------------------------
+
+          npm i react-router-dom
+
+Crete Router: 
+             1) import : import {createBrowserRouter, RouterProvider} from "react-router-dom"
+
+             2) define path/Routes: 
+
+                  export default function app(){
+                   const Routes = createBrowserRouter([           //create router by passing object
+                    {path:"/", element: <Home />},
+                    {path:"/about", element: <About />}
+                   ])
+
+                   return(
+                    <>
+                    <RouterProvider router={Router}>   //Provide Router 
+                    </>
+                   )
+                  }
+                
+## Another way to create Routes: 
+             import {createBrowserRouter, RouterProvider, createRoutesFromElements, Routes} from "react-router-dom"
+
+             export default function app(){
+                   const Routes = createRoutesFromElements(  
+                    <>
+                    <Route path:"/", element: {<Home />}/>
+                    <Route path:"/about", element:{ <About />} />
+                    </>
+                   )
+           const Router = createBrowserRouter(Routes);
+
+                   return(
+                    <>
+                    <RouterProvider router={Router}>   //Provide Router 
+                    </>
+                   )
+                  }
+
+
+## Another way to create Routes:
+    import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+      function App() {
+        return (
+          <Router>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/about" element={<About />} />
+            </Routes>
+          </Router>
+        );
+      }
+
+
+**Link pages using LINK------------------------------------------------------------------
+
+import {Link} from "react-router-dom";
+
+<div>
+<Link to="/Home">Go to Home</Link>
+</div>
+
+** Nested Routes (Outlet):-----------------------------------------------------
+
+export default function app(){
+                   const Routes = createBrowserRouter([  
+                    {path:"/", element:<Navbar /> children:[   //Make everything children of Navbar
+                      {path:"/", element: <Home />},
+                    {path:"/about", element: <About />}
+                    ]}
+                   ])
+
+                   return(
+                    <>
+                    <RouterProvider router={Router}>   //Provide Router 
+                    </>
+                   )
+                  }
+
+  Using Outlet: inside navbar:
+      <>
+      <div>All navbar code</div>
+
+      <Outlet />                           //all component will render here accordingly
+      </>
+
+
+## Navlink (isActive): -------------------------------------------------
+
+Note: if we want to show which link is active so we can use Navlink instead of Link and use it's isActive fxn
+
+Ex: <Navlink style={({isActive})=> isActive ? {color:"green"} : undefined } to="/Home"> Home </Navlink>
+
+
+## Paths: --------------------------------------------------------------
+1). Absolute Path: "/about"  
+
+2). Relative path:about (It will append about after / wherever want so no need of "/root/about" etc)
+
+Note: if we are using nested routing it's recommended to use Relative path. (no use of /)
+
+
+
+## Dynamic Routing: ----------------------------------------------------
+
+    :If we have Multiple items/anything so we can display their details on one page no need to create new details page for each one.
+    : we can acheive this functionality by passing param in URL.
+    : we can reterive the params by using useParams hook.
+
+  Eg: {
+    path:"/items/:itemid ",             //Passing params after :
+    element <itemDetails />
+  }
+
+ 2) inside items.js:
+     <Link to="items/item-1">Item 1</Link>
+     <Link to="items/item-2">Item 1</Link>
+     <Link to="items/item-3">Item 1</Link>
+     <Link to="items/item-4">Item 1</Link>
+
+ 4). Inside details.js:
+    import {useParams} from "react";
+
+    const value = useParams();
+
+## Unhandled routes: ---------------------------------------------------
+
+1). create error file: errorPage.js:
+
+    export default function ErrorPage(){
+      return(
+        <h1>Something went wrong!!</h1>
+      )
+    }
+
+2). use it in createBrowserRouter on top level router using ErrorElement.
+
+const router = createBrowserRouter([
+  {path:"/" , element:<Home />  errorElement:<ErrorPage />},
+  //Other router
+])
+
+## useNavigate() : -------------------------------------
+     it is used if we want to change routes programatically.
+
+     eg. import {useNavigate} from "react-router-dom"
+
+     const navigate = useNavigate();
+
+     navigate("/Home")    // Use it in any function 
+     navigate(-1)         // use -1 to go back one page 
+
+## useLocation(); : -----------------------
+ to get current URL
+         const location = useLocation();
+
+## useOutletContext() : -------------------------------
+
+We can pass any data in outlet and then can access it by using useOutletContext() hook.
+
+
+Eg: <Outlet context={{...course}}>
+
+:inside component which should be shown there.
+  import {useParams, useOutletContext} from "react-router-dom";
+  const course = useOutletContext();    //Access the outlet data  
