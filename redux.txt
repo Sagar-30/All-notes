@@ -1,0 +1,227 @@
+------------------------------------------------------- Redux --------------------------------------------------------------------
+
+Redux is a state management Library. Helps us to avoid prop drilling.
+
+Note: the data in props is multi directional and there is multiple source of truth(data can be send from anywhere).
+
+Redux makes an application/global state. so the data updation will happen in that global state and anyone can take data from it.
+  so there is single source of truth.
+  and there is uniDirection flow of data (single direction).
+
+** Why Not context API & Why Redux ?
+  
+  Limitations of context API:
+                            1) Over Use of context (in large Applications performence issue)
+                            2) design for static content(which present in our application locally not coming from server side)
+                            3). Context may struggle with complex state management involving multiple API calls, especially when dealing with various types of data.
+                            4). Re render of context consumers: Context re-renders all consumers when the context value changes, which can lead to unnecessary re-renders for components not dependent on that state.
+                            5). Difficult to debug in lot of context calls.
+                            6). Difficult to extend and scale in data driven applications
+
+
+** Pure Functions : A pure function is a function that always returns the same output given the same input and has no side effects.
+                    it doesn't modify any variables outside of its scope, it doesn't mutate its input arguments,
+                     and it doesn't have any I/O operations such as reading from or writing to a file or a database.
+
+    Ex: function sun(a,b){
+      return a+b;
+    }
+
+ ## Impure function :
+            const message = 'Hi ! ';
+             function myMessage(value) {
+             return `${message} ${value}`
+             }
+             console.log(myMessage('Sagar'));
+             
+## Currying in js: ----------------------------------------------
+Combining multiple functions
+
+ Normal fxn: 
+             function sum(a,b,c){
+              return a+b+c;
+             }
+             sum(10,20,30)
+
+  Currying:
+             function sumA(a){
+              return function sumB(b){
+                return function sum(c){
+                  return a+b+c;
+                }
+              }
+             }
+      const sum1 = sumA(10);
+      const sum2 = sum1(20);
+      const sum3 = sum2(30);
+
+      OR
+      const sum = sumA(10)(20)(30);
+
+Note: by using closure(inner fxn can access the variables of outer fxn even after all previous execution)
+ 
+
+## How Redux Works: ---------------------------------------------------------------------------------------
+
+**State: It holds and keeps our data and updates the components when data changes.
+
+   Action ------------ Reducers ------------ Store
+
+   1). Store: Manage & store state.
+
+   2). Action: If we want to modify the data then we have to go through Action and reducer by defining action type.
+      Action has three parts: name,type,payload(data)  //Payload is optional
+
+   3). Dispatcher: It is like postman it takes action and dispatch it from component to reducer.
+       it deliver action- name,type,payload(data) to the reducer and depending on action type reducer takes action on state
+
+   4). Reducer: these are javascript fxns. They must be Pure functions.
+                 Our state/store can only be modify by reducers.
+                 Reducer must return the updated state if updating
+      
+  **Thease makes data's uniDirectional flow
+
+Using Redux:------------------------------------------------------
+
+1). Create Actions file: -----------------------
+    //Action Constants
+
+      export const ADD_TODO = "Add Todo";
+      export const TOGGLE_TODO = "Toggle Todo";
+      
+      
+      //Action creators
+      export const addTodo = (text)=>({text,type:ADD_TODO})
+      export const toggleTodo = (index)=>({index,type:TOGGLE_TODO});
+
+2) Create reducer file: ------------------
+
+mport { ADD_TODO, TOGGLE_TODO } from "../actions/todoActions";
+
+const initialState = { todos: [] };
+
+export default function todoReducer(state = initialState, action) {
+    switch (action.type) {
+        case ADD_TODO: return {
+            ...state, todos: [
+                ...state.todos, { text: action.text, completed: false }
+            ]
+        };
+        case TOGGLE_TODO: return{
+            ...state, todos: state.todos.map((todo,i)=>{
+                if(i === action.index){
+                    todo.completed = !todo.completed;
+                }
+                return todo;            
+            })
+        }
+        default: return state
+    }
+}
+
+3). Create Store: --------------------
+
+import {createStore} from "redux";
+import todoReducer from "./reducers/todoReducer";
+
+const Store = createStore(todoReducer);
+
+export default Store;
+
+4). Provide Store (Provider): ---------------------------------
+
+import {Provider} from "react-redux";
+return (
+    <div>
+      <h1>To Do App</h1>
+      <Provider store={Store}>
+        <TodoForm onCreateTodo={createTodo} />
+        <TodoList todos={todos} onToggle={toggleTodo} />
+      </Provider>
+    </div>
+  );
+
+5). Read Data (useSelector): --------------------------------
+
+import {useSelector} from "react-redux";
+
+const todos = useSelector(state => state.todos);
+
+6). Update Data (useDispatch): ------------------------------
+import { useDispatch } from "react-redux";
+import { addTodo,toggleTodo } from "../../redux/actions/todoActions";
+
+const dispatch = useDispatch()
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    dispatch(addTodo(todoText))
+    setTodoText("");
+  };
+
+7). Multiple Reducers: ----------------------------------------
+    If we have multiple modules/features then we should have multiple reducer for individual feature.
+
+**Combine Multiple reducer (combineRedicer):---------------------------------------------
+
+    import {todoReducer} from "./reducers/todoReducer";
+    import noteReducer from "./reducers/noteReducer";
+    import { combineReducers } from "redux";
+    
+    const result = combineReducers({
+        todos:todoReducer,
+        notes:noteReducer
+    })
+    
+    export const store = redux.createStore(result);
+
+
+
+------------------------------------------------------Redux Toolkit----------------------------------------------------------------------
+
+Challanges with redux: 1) Lot of code.
+                       2) It can be hard to debug because many things happen behind the scenes.
+
+How overcome these Challanges:=> Using Redux Toolkit.
+
+## Steps: 1). npm install @reduxjs/toolkit
+
+## step-2): -----------------------------------------------------
+            Create slice using createSlice function. 
+
+Note: createSlice takes three values: name, initialState, reducers.
+
+Ex: import {createSlice} from "@reduxjs.toolkit";
+     
+     const todoSlice = createSlice({
+       name:"todo",
+       initialState:initialState,
+       reducers:{
+         add:(state,action)=>{      
+           state.todos.push({
+             text: action.payload,
+             completed: false
+           })
+         }
+       }
+     })
+     
+     Note: in reducer function we can access content from action.payload.
+
+ const todoReducer = todoSlice.reducers;                                    //Export reducers to use inside store
+
+ ## step-3) Create Store: -------------------------------------------
+ 
+ : use configureStore
+
+    import {configureStore} from "@reduxjs/toolkit";
+
+    export const store = configureStore({
+      reducer:{
+        todoReducer,
+        noteReducer
+      }
+    })
+
+## step-4) Dispatcher : ---------------------------------------
+ 
